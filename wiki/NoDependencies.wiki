@@ -1,0 +1,2 @@
+#summary No dependencies mean _no dependencies_. No any links to other libraries, espesialy from Apache Commons project.
+#labels Phase-Requirements

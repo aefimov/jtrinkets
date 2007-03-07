@@ -1,0 +1,14 @@
+#summary One-sentence summary of this page.
+
+= Agenda of Project =
+
+This project have strict rules:
+   * [NoDependencies No dependencies]
+   * [NoStaticUtilities No static utility classes]
+   * [NoWrappers No wrapper or delegator classes]
+   * [NoAllInOneJar Do not pack all staff into one jar]
+   * [NoCodeComments Do not comment code blocks]
+   * [OneComponentOneModule One component — one IntelliJ IDEA module]
+   * [TestsForComponent Components must have unit tests]
+   * [OneBuildScript All components must builded by one build script]
+   

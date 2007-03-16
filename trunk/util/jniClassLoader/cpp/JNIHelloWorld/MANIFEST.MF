@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+
+Name: windows/JNIHelloWorld.dll
+Platform: Windows
+

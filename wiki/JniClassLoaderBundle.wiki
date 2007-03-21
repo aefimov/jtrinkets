@@ -15,7 +15,7 @@ Platform: Windows
 Name: linux/JNIHelloWorld.so
 Platform: Linux
 }}}
-Everyone entry has special attribute -- *Platform* which determinate target operating system for this binary library file. It will be unpacked only on correct platform. The platform is matching to JVM system property - os.name, by 'contains' condition. Here is piece of code from module:
+Everyone entry has special attribute — *Platform* which determinate target operating system for this binary library file. It will be unpacked only on correct platform. The platform is matching to JVM system property — os.name, by 'contains' condition. Here is piece of code from module:
 {{{
   String platform = attributes.getValue("Platform");
   if (platform != null && System.getProperty("os.name", "").toLowerCase().contains(platform.toLowerCase())) {

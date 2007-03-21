@@ -1,0 +1,14 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+This module help to use JNI libraries simple. Basicaly using of JNI libraries has requirement -- you must have all libraries accessable from paths defined in java.library.path system property of JVM.
+
+This java.library.path property cannot be changed from Java program. The only one possible way to load your native library from any location -- is to use special classloader, who know where is your library is located.
+
+The jniClassLoader module is trinket component with already implemented such classloader. It have some cosmetic features.
+
+= Features =
+
+  * Loading libraries from [JniClassLoaderBundle bundle].
+  * Simple use with [JniClassLoaderAnnotations JNI annotations]

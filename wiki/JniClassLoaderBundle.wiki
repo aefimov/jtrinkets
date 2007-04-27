@@ -12,8 +12,11 @@ Platform: Windows
 Name: windows/depended.dll
 Platform: Windows
 
-Name: linux/JNIHelloWorld.so
+Name: linux/libJNIHelloWorld.so
 Platform: Linux
+
+Name: linux/libJNIHelloWorld.jnilib
+Platform: Mac
 }}}
 Everyone entry has special attribute — *Platform* which determinate target operating system for this binary library file. It will be unpacked only on correct platform. The platform is matching to JVM system property — os.name, by 'contains' condition. Here is piece of code from module:
 {{{

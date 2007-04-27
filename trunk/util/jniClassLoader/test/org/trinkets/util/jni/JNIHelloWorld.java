@@ -1,7 +1,5 @@
 package org.trinkets.util.jni;
 
-import org.trinkets.util.jni.annotations.JNIBundle;
-
 /**
  * JNI interface
  *

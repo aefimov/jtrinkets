@@ -28,3 +28,71 @@ Everyone entry has special attribute — *Platform* which determinate target ope
 }}}
 
 The binary files will unpacked to temporary folder specified in JNIBundleLoader constructor and then loaded from this folder correctly to JVM.
+
+Ok, how to basicaly link JNI library in java? The answer is here:
+{{{
+public class MyJniTest {
+   public static void main(String[] argv) {
+      System.loadLibrary("JNIHelloWorld");
+      
+      // ...
+   }
+}
+}}}
+
+This code will requered that your library is placed to PATH of JVM executable. Instead of, it will not be loaded successful.
+
+With bundle loader you may not care about it, and follow code will work ok:
+{{{
+public class TestJNIHelloWorld extends TestCase {
+    public void testLoadingJNI() throws IllegalAccessException, InstantiationException {
+        String userHome = System.getProperty("user.home");
+        File librariesDir = new File(userHome, ".jni_cache");
+
+        JNIBundleLoader bundleLoader = new JNIBundleLoader(librariesDir);
+        JNIHelloWorld jniHelloWorld = bundleLoader.newJNI(JNIHelloWorldImpl.class);
+        jniHelloWorld.sayHello("Hello JNI World!");
+    }
+}
+}}}
+
+How it possible? Simple. JNI bundle loader predefine implementation class of JNI by loading it via special classloader, and deploy automaticaly all required libraryes into cache directory. Look on two classes:
+
+JNIHelloWorld.java:
+{{{
+package org.trinkets.util.jni;
+
+public interface JNIHelloWorld {
+    public void sayHello(String hello);
+}
+}}}
+
+And implementation (JNIHelloWorldImpl.java):
+{{{
+package org.trinkets.util.jni;
+
+import org.trinkets.util.jni.annotations.JNIBundle;
+import org.trinkets.util.jni.annotations.JNILibrary;
+
+@JNILibrary("JNIHelloWorld")
+@JNIBundle("JNIHelloWorldBundle.jar")
+public final class JNIHelloWorldImpl implements JNIHelloWorld {
+    /**
+     * Here is public wrapper to native method.
+     *
+     * @param hello Hello string
+     */
+    public void sayHello(String hello) {
+        sayHello0(hello);
+    }
+
+    /**
+     * Here is native method
+     *
+     * @param hello Hello string
+     */
+    private native void sayHello0(String hello);
+}
+}}}
+
+The annotation @JNILibrary is used to delegate call System.loadLibrary to bundle loader, and annotation @JNIBundle is used to define bundles needed to be deployed before class and library was loaded.

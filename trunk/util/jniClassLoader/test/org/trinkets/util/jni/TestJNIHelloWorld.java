@@ -11,11 +11,11 @@ import java.io.File;
  */
 public class TestJNIHelloWorld extends TestCase {
     public void testLoadingJNI() throws IllegalAccessException, InstantiationException {
-        String directory = System.getProperty("user.home");
+        String userHome = System.getProperty("user.home");
+        File librariesDir = new File(userHome, ".jni_cache");
 
-        JNIBundleLoader bundleLoader = new JNIBundleLoader(new File(directory, ".jni_cache"), ".dll");
-        Class<?> jniClass = bundleLoader.loadClass("org.trinkets.util.jni.JNIHelloWorldImpl");
-        JNIHelloWorld jniHelloWorld = (JNIHelloWorld) jniClass.newInstance();
+        JNIBundleLoader bundleLoader = new JNIBundleLoader(librariesDir);
+        JNIHelloWorld jniHelloWorld = bundleLoader.newJNI(JNIHelloWorldImpl.class);
         jniHelloWorld.sayHello("Hello JNI World!");
     }
 }

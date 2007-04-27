@@ -1,10 +1,10 @@
 package org.trinkets.util.jni;
 
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import sun.misc.Resource;
-import sun.misc.URLClassPath;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
@@ -14,9 +14,6 @@ import java.security.SecureClassLoader;
 import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 /**
  * JNI Class Loader help to load custom JNI libraries without any puting
@@ -25,13 +22,12 @@ import java.util.jar.Manifest;
  * @author Alexey Efimov
  */
 public class JNIClassLoader extends SecureClassLoader {
-    private final String libraryExtension;
+    private final String libraryNamingFormat;
     private final File libraryCacheDirectory;
-    private static final String MANIFEST_URL = "META-INF/MANIFEST.MF";
 
-    public JNIClassLoader(@NotNull ClassLoader parent, @NotNull String libraryExtension, @NotNull File libraryCacheDirectory) {
+    public JNIClassLoader(@NotNull ClassLoader parent, @NotNull @NonNls String libraryNamingFormat, @NotNull File libraryCacheDirectory) {
         super(parent);
-        this.libraryExtension = libraryExtension;
+        this.libraryNamingFormat = libraryNamingFormat;
         this.libraryCacheDirectory = libraryCacheDirectory;
         if (libraryCacheDirectory.exists() && !libraryCacheDirectory.isDirectory()) {
             throw new IllegalArgumentException(
@@ -87,7 +83,7 @@ public class JNIClassLoader extends SecureClassLoader {
     }
 
     protected String findLibrary(String libname) {
-        String libraryFileName = libname.concat(libraryExtension);
+        String libraryFileName = MessageFormat.format(libraryNamingFormat, libname);
         File libraryFile = new File(libraryCacheDirectory, libraryFileName);
         if (libraryFile.exists() && libraryFile.isFile()) {
             return libraryFile.getAbsolutePath();
@@ -95,54 +91,4 @@ public class JNIClassLoader extends SecureClassLoader {
         return super.findLibrary(libname);
     }
 
-    /**
-     * This extract resource from classpath to temporary file.
-     *
-     * @param bundleURL Resource URL of bundled libraries ZIP archive
-     * @throws java.io.IOException For IO operations error
-     */
-    public final void deployBundle(@NotNull URL bundleURL) throws IOException {
-        if (!libraryCacheDirectory.exists()) {
-            libraryCacheDirectory.mkdirs();
-            libraryCacheDirectory.deleteOnExit();
-        }
-        URLClassPath ucp = new URLClassPath(new URL[]{bundleURL});
-        Resource manifestResource = ucp.getResource(MANIFEST_URL);
-        if (manifestResource == null) {
-            throw new IllegalArgumentException(MessageFormat.format("The jar is not JNI bundle (missing manifest): {0}", bundleURL.getPath()));
-        }
-        Manifest manifest = manifestResource.getManifest();
-        Map<String, Attributes> manifestEntries = manifest.getEntries();
-        for (String entryName : manifestEntries.keySet()) {
-            Attributes attributes = manifestEntries.get(entryName);
-            String platform = attributes.getValue("Platform");
-            if (platform != null && System.getProperty("os.name", "").toLowerCase().contains(platform.toLowerCase())) {
-                // Unpack library
-                Resource resource = ucp.getResource(entryName);
-                if (resource != null) {
-                    String libraryName = entryName;
-                    int si = libraryName.lastIndexOf('/');
-                    if (si != -1) {
-                        libraryName = libraryName.substring(si + 1);
-                    }
-                    if (!libraryName.endsWith(libraryExtension)) {
-                        libraryName = libraryName.concat(libraryExtension);
-                    }
-                    File file = new File(libraryCacheDirectory, libraryName);
-                    file.deleteOnExit();
-                    FileOutputStream fileOutputStream = new FileOutputStream(file);
-                    InputStream inputStream = new BufferedInputStream(resource.getInputStream(), 1024);
-                    try {
-                        byte[] buffer = new byte[1024];
-                        for (int n = inputStream.read(buffer); n != -1; n = inputStream.read(buffer)) {
-                            fileOutputStream.write(buffer, 0, n);
-                        }
-                    } finally {
-                        inputStream.close();
-                        fileOutputStream.close();
-                    }
-                }
-            }
-        }
-    }
 }

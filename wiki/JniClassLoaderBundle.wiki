@@ -1,7 +1,5 @@
 #summary documentation of libraries bundle for JniClassLoader.
 
-= Introduction =
-
 The JniClassLoader support loading of JNI libraries from packed JAR archive. The JAR archive may contains libraries for different operating systems. It also must have META-INF/MANIFEST.MF file inside with set of entries for each binary file:
 {{{
 Manifest-Version: 1.0

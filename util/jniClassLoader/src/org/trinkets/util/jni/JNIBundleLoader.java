@@ -2,15 +2,12 @@ package org.trinkets.util.jni;
 
 import org.jetbrains.annotations.NotNull;
 import org.trinkets.util.jni.annotations.JNIBundle;
-import org.trinkets.util.jni.annotations.JNILibrary;
 import sun.misc.Resource;
 import sun.misc.URLClassPath;
 import sun.reflect.Reflection;
 
 import java.io.*;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Map;
@@ -78,61 +75,33 @@ public final class JNIBundleLoader {
         JNIClassLoader jniLoader = new JNIClassLoader(parentClassLoader, libraryNamingFormat, cacheDirectory);
         try {
             Class<T> jniType = (Class<T>) jniLoader.predefineClass(implementationClass.getName());
-            JNIBundle bundle = getAnnotation(jniType, JNIBundle.class);
-            String[] bundleURLs = bundle.value();
-            if (bundleURLs != null) {
-                for (String bundleURL : bundleURLs) {
-                    URL resource = jniType.getResource(bundleURL);
-                    if (resource == null) {
-                        throw new FileNotFoundException("the JNI bundle not found in classpath: " + bundleURL);
+            JNIBundle bundle = jniType.getAnnotation(JNIBundle.class);
+            if (bundle != null) {
+                String[] bundleURLs = bundle.value();
+                if (bundleURLs != null) {
+                    for (String bundleURL : bundleURLs) {
+                        URL resource = jniType.getResource(bundleURL);
+                        if (resource == null) {
+                            throw new FileNotFoundException("the JNI bundle not found in classpath: " + bundleURL);
+                        }
+                        // Deploy bundles
+                        deployBundle(resource, cacheDirectory);
                     }
-                    // Deploy bundles
-                    deployBundle(resource, cacheDirectory);
                 }
             }
+            // Load linked libraries
+            jniLoader.loadLibraries(jniType);
 
-            // Load libraries
-            if (jniType.isAnnotationPresent(JNILibrary.class)) {
-                Method method = ClassLoader.class.getDeclaredMethod("loadLibrary", Class.class, String.class, boolean.class);
-                method.setAccessible(true);
-                JNILibrary library = getAnnotation(jniType, JNILibrary.class);
-                for (String lib : library.value()) {
-                    method.invoke(null, jniType, lib, false);
-                }
-            }
             return jniType;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Return annotation from class or throw exception if annotation is not found
-     *
-     * @param type           Class
-     * @param annotationType Annotation class
-     * @return Annotation
-     */
-    @SuppressWarnings({"HardCodedStringLiteral"})
-    @NotNull
-    public static <T extends Annotation> T getAnnotation(Class<?> type, Class<T> annotationType) {
-        T annotation = type.getAnnotation(annotationType);
-        if (annotation == null) {
-            throw new IllegalArgumentException(
-                    MessageFormat.format(
-                            "class not annotated with {0} annotation", annotationType.getName()
-                    )
-            );
-        }
-        return annotation;
     }
 
     /**

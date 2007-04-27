@@ -2,17 +2,20 @@ package org.trinkets.util.jni;
 
 import org.jetbrains.annotations.NotNull;
 import org.trinkets.util.jni.annotations.JNIBundle;
-import org.trinkets.util.jni.annotations.JNILibraries;
+import org.trinkets.util.jni.annotations.JNILibrary;
+import sun.misc.Resource;
+import sun.misc.URLClassPath;
 import sun.reflect.Reflection;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.Map;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 /**
  * JNI libraries bundle loader.
@@ -20,53 +23,80 @@ import java.text.MessageFormat;
  * @author Alexey Efimov
  */
 public final class JNIBundleLoader {
+    private static final String MANIFEST_URL = "META-INF/MANIFEST.MF";
+    private static final String PLATFORM = System.getProperty("os.name", "").toLowerCase();
+
     private final File cacheDirectory;
-    private final String extension;
+    private final String libraryNamingFormat;
 
-    public JNIBundleLoader(@NotNull File cacheDirectory, @NotNull String extension) {
+    public JNIBundleLoader(@NotNull File cacheDirectory) {
+        this(cacheDirectory, getLibraryNamingFormat());
+    }
+
+    private static String getLibraryNamingFormat() {
+        if (PLATFORM.startsWith("windows")) {
+            return "{0}.dll";
+        }
+        if (PLATFORM.startsWith("mac")) {
+            return "lib{0}.jnilib";
+        }
+        return "lib{0}.so";
+    }
+
+    public JNIBundleLoader(@NotNull File cacheDirectory, @NotNull String libraryNamingFormat) {
         this.cacheDirectory = cacheDirectory;
-        this.extension = extension;
+        this.libraryNamingFormat = libraryNamingFormat;
+    }
+
+    @NotNull
+    public final <T> T newJNI(@NotNull Class<? extends T> implementationClass) throws IllegalAccessException, InstantiationException {
+        return predefineJNIAnnotatedClass(implementationClass).newInstance();
     }
 
     /**
      * Load JNI library via special class loader.
      *
-     * @param jniClass String reference path to implementation of JNI bundled class. Please do not refer class directly via {@link Class} object to get name, it caused class to be loaded into wrong classloader.
+     * @param implementationClass String reference path to implementation of JNI bundled class. Please do not refer class directly via {@link Class} object to get name, it caused class to be loaded into wrong classloader.
      * @return Loaded class
      */
     @NotNull
-    public final Class<?> loadClass(@NotNull String jniClass) {
-        return loadClass(Reflection.getCallerClass(2).getClassLoader(), jniClass);
+    public final <T> Class<T> predefineJNIAnnotatedClass(@NotNull Class<? extends T> implementationClass) {
+        return predefineJNIAnnotatedClass(Reflection.getCallerClass(2).getClassLoader(), implementationClass);
     }
 
 
     /**
      * Load JNI library via special class loader.
      *
-     * @param parentClassLoader Parent classloader (current classloader)
-     * @param jniClass          String reference path to implementation of JNI bundled class. Please do not refer class directly via {@link Class} object to get name, it caused class to be loaded into wrong classloader.
+     * @param parentClassLoader   Parent classloader (current classloader)
+     * @param implementationClass String reference path to implementation of JNI bundled class. Please do not refer class directly via {@link Class} object to get name, it caused class to be loaded into wrong classloader.
      * @return Loaded class
      */
-    @SuppressWarnings({"ReflectionForUnavailableAnnotation"})
+    @SuppressWarnings({"unchecked"})
     @NotNull
-    public final Class<?> loadClass(ClassLoader parentClassLoader, @NotNull String jniClass) {
-        JNIClassLoader jniLoader = new JNIClassLoader(parentClassLoader, extension, cacheDirectory);
+    public final <T> Class<T> predefineJNIAnnotatedClass(ClassLoader parentClassLoader, Class<? extends T> implementationClass) {
+        JNIClassLoader jniLoader = new JNIClassLoader(parentClassLoader, libraryNamingFormat, cacheDirectory);
         try {
-            Class<?> jniType = jniLoader.predefineClass(jniClass);
+            Class<T> jniType = (Class<T>) jniLoader.predefineClass(implementationClass.getName());
             JNIBundle bundle = getAnnotation(jniType, JNIBundle.class);
-            String bundleURL = bundle.value();
-            URL resource = jniType.getResource(bundleURL);
-            if (resource == null) {
-                throw new FileNotFoundException("the JNI bundle not found in classpath: " + bundleURL);
+            String[] bundleURLs = bundle.value();
+            if (bundleURLs != null) {
+                for (String bundleURL : bundleURLs) {
+                    URL resource = jniType.getResource(bundleURL);
+                    if (resource == null) {
+                        throw new FileNotFoundException("the JNI bundle not found in classpath: " + bundleURL);
+                    }
+                    // Deploy bundles
+                    deployBundle(resource, cacheDirectory);
+                }
             }
 
-            jniLoader.deployBundle(resource);
             // Load libraries
-            if (jniType.isAnnotationPresent(JNILibraries.class)) {
+            if (jniType.isAnnotationPresent(JNILibrary.class)) {
                 Method method = ClassLoader.class.getDeclaredMethod("loadLibrary", Class.class, String.class, boolean.class);
                 method.setAccessible(true);
-                JNILibraries libraries = getAnnotation(jniType, JNILibraries.class);
-                for (String lib : libraries.value()) {
+                JNILibrary library = getAnnotation(jniType, JNILibrary.class);
+                for (String lib : library.value()) {
                     method.invoke(null, jniType, lib, false);
                 }
             }
@@ -103,5 +133,54 @@ public final class JNIBundleLoader {
             );
         }
         return annotation;
+    }
+
+    /**
+     * This extract resource from classpath to temporary file.
+     *
+     * @param bundleURL Resource URL of bundled libraries ZIP archive
+     * @param dir       Deploy directory
+     * @throws java.io.IOException For IO operations error
+     */
+    private static void deployBundle(@NotNull URL bundleURL, File dir) throws IOException {
+        if (!dir.exists()) {
+            dir.mkdirs();
+            dir.deleteOnExit();
+        }
+        URLClassPath ucp = new URLClassPath(new URL[]{bundleURL});
+        Resource manifestResource = ucp.getResource(MANIFEST_URL);
+        if (manifestResource == null) {
+            throw new IllegalArgumentException(MessageFormat.format("The jar is not JNI bundle (missing manifest): {0}", bundleURL.getPath()));
+        }
+        Manifest manifest = manifestResource.getManifest();
+        Map<String, Attributes> manifestEntries = manifest.getEntries();
+        for (String entryName : manifestEntries.keySet()) {
+            Attributes attributes = manifestEntries.get(entryName);
+            String platform = attributes.getValue("Platform");
+            if (platform != null && PLATFORM.contains(platform.toLowerCase())) {
+                // Unpack library
+                Resource resource = ucp.getResource(entryName);
+                if (resource != null) {
+                    String libraryName = entryName;
+                    int si = libraryName.lastIndexOf('/');
+                    if (si != -1) {
+                        libraryName = libraryName.substring(si + 1);
+                    }
+                    File file = new File(dir, libraryName);
+                    file.deleteOnExit();
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    InputStream inputStream = new BufferedInputStream(resource.getInputStream(), 1024);
+                    try {
+                        byte[] buffer = new byte[1024];
+                        for (int n = inputStream.read(buffer); n != -1; n = inputStream.read(buffer)) {
+                            fileOutputStream.write(buffer, 0, n);
+                        }
+                    } finally {
+                        inputStream.close();
+                        fileOutputStream.close();
+                    }
+                }
+            }
+        }
     }
 }

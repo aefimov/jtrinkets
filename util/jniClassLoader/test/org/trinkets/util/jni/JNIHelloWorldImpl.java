@@ -1,10 +1,10 @@
 package org.trinkets.util.jni;
 
 import org.trinkets.util.jni.annotations.JNIBundle;
-import org.trinkets.util.jni.annotations.JNILibraries;
+import org.trinkets.util.jni.annotations.JNILibrary;
 
+@JNILibrary("JNIHelloWorld")
 @JNIBundle("JNIHelloWorldBundle.jar")
-@JNILibraries({"JNIHelloWorld"})
 public final class JNIHelloWorldImpl implements JNIHelloWorld {
     /**
      * Here is public wrapper to native method.

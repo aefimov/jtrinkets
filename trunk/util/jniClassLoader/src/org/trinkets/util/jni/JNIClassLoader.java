@@ -2,9 +2,12 @@ package org.trinkets.util.jni;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.trinkets.util.jni.annotations.JNILibrary;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
@@ -22,6 +25,17 @@ import java.util.List;
  * @author Alexey Efimov
  */
 public class JNIClassLoader extends SecureClassLoader {
+    private static final Method LOAD_LIBRARY_METHOD;
+
+    static {
+        try {
+            LOAD_LIBRARY_METHOD = ClassLoader.class.getDeclaredMethod("loadLibrary", Class.class, String.class, boolean.class);
+            LOAD_LIBRARY_METHOD.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private final String libraryNamingFormat;
     private final File libraryCacheDirectory;
 
@@ -80,6 +94,16 @@ public class JNIClassLoader extends SecureClassLoader {
             }
         }
         return super.findClass(name);
+    }
+
+    public void loadLibraries(Class<?> jniType) throws IllegalAccessException, InvocationTargetException {
+        // Load libraries
+        if (jniType.isAnnotationPresent(JNILibrary.class)) {
+            JNILibrary library = jniType.getAnnotation(JNILibrary.class);
+            for (String lib : library.value()) {
+                LOAD_LIBRARY_METHOD.invoke(null, jniType, lib, false);
+            }
+        }
     }
 
     protected String findLibrary(String libname) {

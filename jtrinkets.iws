@@ -14,7 +14,7 @@
   <component name="ChangeListManager">
     <list default="true" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jtrinkets.iws" afterPath="$PROJECT_DIR$/jtrinkets.iws" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wiki/JniClassLoaderAnnotations.wiki" />
+      <change type="DELETED" beforePath="C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\wiki\JniClassLoaderAnnotations.wiki" afterPath="" />
     </list>
   </component>
   <component name="ChangeListSynchronizer" />

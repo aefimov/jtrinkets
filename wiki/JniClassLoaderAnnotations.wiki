@@ -1,0 +1,89 @@
+#summary You can load JNI libraries automaticaly and from any paths
+
+= Introduction =
+
+To use JNI library in standard way, you must have call to System.loadLibrary before. You also must have library file in PATH of JVM executable.
+
+{{{
+package org.trinkets.util.jni;
+
+public final class JNIHelloWorld {
+    static {
+       System.loadLibrary("JNIHelloWorld");
+    }
+
+    /**
+     * Here is public wrapper to native method.
+     *
+     * @param hello Hello string
+     */
+    public void sayHello(String hello) {
+        sayHello0(hello);
+    }
+
+    /**
+     * Here is native method
+     *
+     * @param hello Hello string
+     */
+    private native void sayHello0(String hello);
+}
+}}}
+
+For plugin system it make some troubles. First one — is «it impossible to put native library into PATH of JVM». 
+
+JNIClassLoader allow you to use JNI libraries for your plugins.
+
+= How it work =
+
+Developer split native class into two: public interface and implementation where defined all native methods. The second one class will predefined via special JNIClassLoader and it will enable all features, as loading libraries from any path or automaticaly loading libraries by annotations.
+
+= Details =
+
+The code above translated into this one:
+   #
+{{{
+package org.trinkets.util.jni;
+
+public interface JNIHelloWorld {
+    public void sayHello(String hello);
+}
+}}}
+   #
+{{{
+package org.trinkets.util.jni;
+
+import org.trinkets.util.jni.annotations.JNILibrary;
+
+@JNILibrary("JNIHelloWorld")
+public final class JNIHelloWorldImpl implements JNIHelloWorld {
+    /**
+     * Here is public wrapper to native method.
+     *
+     * @param hello Hello string
+     */
+    public void sayHello(String hello) {
+        sayHello0(hello);
+    }
+
+    /**
+     * Here is native method
+     *
+     * @param hello Hello string
+     */
+    private native void sayHello0(String hello);
+}
+}}}
+
+You can see that no realy changes is happend, but now all native code separated from pure java. Ok, we must load it correctly now:
+{{{
+String userHome = System.getProperty("user.home");
+File librariesDir = new File(userHome, ".jni_cache");
+
+JNIClassLoader jniClassLoader = new JNIClassLoader(librariesDir);
+JNIHelloWorld jniHelloWorld = jniClassLoader.newJNI(JNIHelloWorldImpl.class);
+jniHelloWorld.sayHello("Hello JNI World!");
+}}}
+
+This code will find library JNIHelloWorld in .jni_cache directory of user's home. Then load it and create instance of JNI native object class.
+

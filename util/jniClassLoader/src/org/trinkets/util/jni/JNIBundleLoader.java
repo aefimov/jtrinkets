@@ -1,5 +1,6 @@
 package org.trinkets.util.jni;
 
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.trinkets.util.jni.annotations.JNIBundle;
 import sun.misc.Resource;
@@ -10,7 +11,9 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -19,62 +22,42 @@ import java.util.jar.Manifest;
  *
  * @author Alexey Efimov
  */
-public final class JNIBundleLoader {
-    private static final String MANIFEST_URL = "META-INF/MANIFEST.MF";
-    private static final String PLATFORM = System.getProperty("os.name", "").toLowerCase();
+public class JNIBundleLoader {
+    private final Set<URL> deployedBundles = new HashSet<URL>();
+    private final JNIClassLoader jniClassLoader;
 
-    private final File cacheDirectory;
-    private final String libraryNamingFormat;
-
-    public JNIBundleLoader(@NotNull File cacheDirectory) {
-        this(cacheDirectory, getLibraryNamingFormat());
+    public JNIBundleLoader(@NotNull File libraryCacheDirectory) {
+        this((String) null, libraryCacheDirectory);
     }
 
-    private static String getLibraryNamingFormat() {
-        if (PLATFORM.startsWith("windows")) {
-            return "{0}.dll";
-        }
-        if (PLATFORM.startsWith("mac")) {
-            return "lib{0}.jnilib";
-        }
-        return "lib{0}.so";
+    public JNIBundleLoader(@NonNls String libraryNamingFormat, @NotNull File libraryCacheDirectory) {
+        this(Reflection.getCallerClass(2).getClassLoader(), libraryNamingFormat, libraryCacheDirectory);
     }
 
-    public JNIBundleLoader(@NotNull File cacheDirectory, @NotNull String libraryNamingFormat) {
-        this.cacheDirectory = cacheDirectory;
-        this.libraryNamingFormat = libraryNamingFormat;
+    public JNIBundleLoader(@NotNull ClassLoader parent, @NotNull File libraryCacheDirectory) {
+        this(parent, null, libraryCacheDirectory);
+    }
+
+    public JNIBundleLoader(@NotNull ClassLoader parent, @NonNls String libraryNamingFormat, @NotNull File libraryCacheDirectory) {
+        jniClassLoader = new JNIClassLoader(parent, libraryNamingFormat, libraryCacheDirectory);
     }
 
     @NotNull
     public final <T> T newJNI(@NotNull Class<? extends T> implementationClass) throws IllegalAccessException, InstantiationException {
-        return predefineJNIAnnotatedClass(implementationClass).newInstance();
+        return predefineClass(implementationClass).newInstance();
     }
 
     /**
      * Load JNI library via special class loader.
      *
-     * @param implementationClass String reference path to implementation of JNI bundled class. Please do not refer class directly via {@link Class} object to get name, it caused class to be loaded into wrong classloader.
-     * @return Loaded class
-     */
-    @NotNull
-    public final <T> Class<T> predefineJNIAnnotatedClass(@NotNull Class<? extends T> implementationClass) {
-        return predefineJNIAnnotatedClass(Reflection.getCallerClass(2).getClassLoader(), implementationClass);
-    }
-
-
-    /**
-     * Load JNI library via special class loader.
-     *
-     * @param parentClassLoader   Parent classloader (current classloader)
      * @param implementationClass String reference path to implementation of JNI bundled class. Please do not refer class directly via {@link Class} object to get name, it caused class to be loaded into wrong classloader.
      * @return Loaded class
      */
     @SuppressWarnings({"unchecked"})
     @NotNull
-    public final <T> Class<T> predefineJNIAnnotatedClass(ClassLoader parentClassLoader, Class<? extends T> implementationClass) {
-        JNIClassLoader jniLoader = new JNIClassLoader(parentClassLoader, libraryNamingFormat, cacheDirectory);
+    public final <T> Class<T> predefineClass(Class<? extends T> implementationClass) {
         try {
-            Class<T> jniType = (Class<T>) jniLoader.predefineClass(implementationClass.getName());
+            Class<T> jniType = (Class<T>) jniClassLoader.predefineClass(implementationClass.getName());
             JNIBundle bundle = jniType.getAnnotation(JNIBundle.class);
             if (bundle != null) {
                 String[] bundleURLs = bundle.value();
@@ -83,14 +66,16 @@ public final class JNIBundleLoader {
                         URL resource = jniType.getResource(bundleURL);
                         if (resource == null) {
                             throw new FileNotFoundException("the JNI bundle not found in classpath: " + bundleURL);
+                        } else if (!deployedBundles.contains(resource)) {
+                            // Deploy bundles
+                            deployBundle(resource, jniClassLoader.getLibraryCacheDirectory());
+                            deployedBundles.add(resource);
                         }
-                        // Deploy bundles
-                        deployBundle(resource, cacheDirectory);
                     }
                 }
             }
             // Load linked libraries
-            jniLoader.loadLibraries(jniType);
+            jniClassLoader.loadLibraries(jniType);
 
             return jniType;
         } catch (ClassNotFoundException e) {
@@ -117,7 +102,7 @@ public final class JNIBundleLoader {
             dir.deleteOnExit();
         }
         URLClassPath ucp = new URLClassPath(new URL[]{bundleURL});
-        Resource manifestResource = ucp.getResource(MANIFEST_URL);
+        Resource manifestResource = ucp.getResource("META-INF/MANIFEST.MF");
         if (manifestResource == null) {
             throw new IllegalArgumentException(MessageFormat.format("The jar is not JNI bundle (missing manifest): {0}", bundleURL.getPath()));
         }
@@ -126,7 +111,7 @@ public final class JNIBundleLoader {
         for (String entryName : manifestEntries.keySet()) {
             Attributes attributes = manifestEntries.get(entryName);
             String platform = attributes.getValue("Platform");
-            if (platform != null && PLATFORM.contains(platform.toLowerCase())) {
+            if (platform != null && PlatformInfo.isMatched(platform)) {
                 // Unpack library
                 Resource resource = ucp.getResource(entryName);
                 if (resource != null) {

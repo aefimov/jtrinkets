@@ -3,6 +3,7 @@ package org.trinkets.util.jni;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.trinkets.util.jni.annotations.JNILibrary;
+import sun.reflect.Reflection;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +16,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.security.ProtectionDomain;
 import java.security.SecureClassLoader;
 import java.text.MessageFormat;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * JNI Class Loader help to load custom JNI libraries without any puting
@@ -38,16 +38,37 @@ public class JNIClassLoader extends SecureClassLoader {
 
     private final String libraryNamingFormat;
     private final File libraryCacheDirectory;
+    private final Map<String, Class<?>> definedClasses = new HashMap<String, Class<?>>();
+    private final Set<String> loadedLibraries = new HashSet<String>();
 
-    public JNIClassLoader(@NotNull ClassLoader parent, @NotNull @NonNls String libraryNamingFormat, @NotNull File libraryCacheDirectory) {
+    public JNIClassLoader(@NotNull File libraryCacheDirectory) {
+        this((String) null, libraryCacheDirectory);
+    }
+
+    public JNIClassLoader(@NonNls String libraryNamingFormat, @NotNull File libraryCacheDirectory) {
+        this(Reflection.getCallerClass(2).getClassLoader(), libraryNamingFormat, libraryCacheDirectory);
+    }
+
+    public JNIClassLoader(@NotNull ClassLoader parent, @NotNull File libraryCacheDirectory) {
+        this(parent, null, libraryCacheDirectory);
+    }
+
+    public JNIClassLoader(@NotNull ClassLoader parent, @NonNls String libraryNamingFormat, @NotNull File libraryCacheDirectory) {
         super(parent);
-        this.libraryNamingFormat = libraryNamingFormat;
+        this.libraryNamingFormat = libraryNamingFormat != null ? libraryNamingFormat : PlatformInfo.JNI_LIBRARY_NAMING_FORMAT;
         this.libraryCacheDirectory = libraryCacheDirectory;
         if (libraryCacheDirectory.exists() && !libraryCacheDirectory.isDirectory()) {
             throw new IllegalArgumentException(
                     MessageFormat.format("The cache directory path is point to a file: {0}", libraryCacheDirectory.getAbsolutePath()));
         }
+    }
 
+    @SuppressWarnings({"unchecked"})
+    @NotNull
+    public final <T> T newJNI(@NotNull Class<? extends T> implementationClass) throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
+        Class<?> jniType = predefineClass(implementationClass.getName());
+        loadLibraries(jniType);
+        return (T) jniType.newInstance();
     }
 
     /**
@@ -59,6 +80,11 @@ public class JNIClassLoader extends SecureClassLoader {
      */
     @NotNull
     public final Class<?> predefineClass(@NotNull String name) throws ClassNotFoundException {
+        Class<?> definedClass = definedClasses.get(name);
+        if (definedClass != null) {
+            // Already defined
+            return definedClass;
+        }
         // Try to delegate
         URL classURL = getResource(name.replace('.', '/').concat(".class"));
         if (classURL != null) {
@@ -82,7 +108,9 @@ public class JNIClassLoader extends SecureClassLoader {
                                 buffer.put(trunk);
                             }
                         }
-                        return defineClass(name, buffer, (ProtectionDomain) null);
+                        Class<?> aClass = defineClass(name, buffer, (ProtectionDomain) null);
+                        definedClasses.put(name, aClass);
+                        return aClass;
                     } finally {
                         buffers.clear();
                     }
@@ -101,7 +129,10 @@ public class JNIClassLoader extends SecureClassLoader {
         if (jniType.isAnnotationPresent(JNILibrary.class)) {
             JNILibrary library = jniType.getAnnotation(JNILibrary.class);
             for (String lib : library.value()) {
-                LOAD_LIBRARY_METHOD.invoke(null, jniType, lib, false);
+                if (!loadedLibraries.contains(lib)) {
+                    LOAD_LIBRARY_METHOD.invoke(null, jniType, lib, false);
+                    loadedLibraries.add(lib);
+                }
             }
         }
     }
@@ -115,4 +146,7 @@ public class JNIClassLoader extends SecureClassLoader {
         return super.findLibrary(libname);
     }
 
+    public final File getLibraryCacheDirectory() {
+        return libraryCacheDirectory;
+    }
 }

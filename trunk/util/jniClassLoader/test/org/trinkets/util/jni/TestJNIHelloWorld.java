@@ -18,6 +18,8 @@ public class TestJNIHelloWorld extends TestCase {
         JNIBundleLoader bundleLoader = new JNIBundleLoader(librariesDir);
         JNIHelloWorld jniHelloWorld = bundleLoader.newJNI(JNIHelloWorldImpl.class);
         jniHelloWorld.sayHello("Hello JNI World!");
+        JNIHelloWorld jniHelloWorld2 = bundleLoader.newJNI(JNIHelloWorldImpl.class);
+        jniHelloWorld2.sayHello("Hello JNI World!");
     }
 
     @SuppressWarnings({"unchecked"})
@@ -25,9 +27,11 @@ public class TestJNIHelloWorld extends TestCase {
         String userHome = System.getProperty("user.home");
         File librariesDir = new File(userHome, ".jni_cache");
 
-        JNIClassLoader jniClassLoader = new JNIClassLoader(TestJNIHelloWorld.class.getClassLoader(), "{0}.dll", librariesDir);
-        Class<JNIHelloWorld> jniHelloWorld = (Class<JNIHelloWorld>) jniClassLoader.predefineClass(JNIHelloWorldImpl.class.getName());
-        jniClassLoader.loadLibraries(jniHelloWorld);
-        jniHelloWorld.newInstance().sayHello("Hello JNI World!");
+        JNIClassLoader jniClassLoader = new JNIClassLoader(librariesDir);
+        JNIHelloWorld jniHelloWorld = jniClassLoader.newJNI(JNIHelloWorldImpl.class);
+        jniHelloWorld.sayHello("Hello JNI World!");
+
+        JNIHelloWorld jniHelloWorld2 = jniClassLoader.newJNI(JNIHelloWorldImpl.class);
+        jniHelloWorld2.sayHello("Hello JNI World!");
     }
 }

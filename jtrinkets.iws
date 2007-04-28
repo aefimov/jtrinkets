@@ -13,8 +13,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/PlatformInfo.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jtrinkets.iws" afterPath="$PROJECT_DIR$/jtrinkets.iws" />
-      <change type="DELETED" beforePath="C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\wiki\JniClassLoaderAnnotations.wiki" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java" />
     </list>
   </component>
   <component name="ChangeListSynchronizer" />
@@ -106,7 +109,68 @@
     </subPane>
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="JniClassLoaderBundle.wiki" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wiki/JniClassLoaderBundle.wiki">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="95" column="0" selection-start="3049" selection-end="3049" vertical-scroll-proportion="0.89756095">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JNIHelloWorldImpl.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/JNIHelloWorldImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="19" selection-start="0" selection-end="583" vertical-scroll-proportion="0.14251497">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestJNIHelloWorld.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="30" column="56" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.5597561">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JNIClassLoader.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="142" column="23" selection-start="5777" selection-end="5777" vertical-scroll-proportion="0.6682927">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JNIBundleLoader.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="68" column="30" selection-start="2777" selection-end="2777" vertical-scroll-proportion="0.20731707">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JNIHelloWorld.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/JNIHelloWorld.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="17" selection-start="0" selection-end="160" vertical-scroll-proportion="0.14251497">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -185,6 +249,38 @@
         <PATH_ELEMENT>
           <option name="myItemId" value="jtrinkets" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\wiki" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
@@ -389,24 +485,30 @@
     </key>
   </component>
   <component name="RestoreUpdateTree" />
-  <component name="RunManager" selected="JUnit.TestJNIHelloWorld.testBundleLoader">
-    <tempConfiguration default="false" name="TestJNIHelloWorld.testBundleLoader" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+  <component name="RunManager" selected="JUnit.TestJNIHelloWorld">
+    <tempConfiguration default="false" name="TestJNIHelloWorld" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <pattern value="org.trinkets.util.jni.*" />
       <module name="jniClassLoader" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
       <option name="PACKAGE_NAME" value="org.trinkets.util.jni" />
       <option name="MAIN_CLASS_NAME" value="org.trinkets.util.jni.TestJNIHelloWorld" />
-      <option name="METHOD_NAME" value="testBundleLoader" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="METHOD_NAME" value="testClassLoader" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ADDITIONAL_CLASS_PATH" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="wholeProject" />
       </option>
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="3850" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" value="true" />
@@ -526,12 +628,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1288" height="1002" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="7" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29683697" order="0" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29683697" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3280543" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" order="8" />
@@ -617,13 +719,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/RetentionPolicy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="12" selection-start="540" selection-end="540" vertical-scroll-proportion="0.26467067">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/Retention.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="23" column="16" selection-start="722" selection-end="722" vertical-scroll-proportion="0.36646706">
@@ -645,23 +740,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/annotations/JNILibrary.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="18" selection-start="577" selection-end="577" vertical-scroll-proportion="0.3257485">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wiki/Agenda.wiki">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wiki/JniClassLoaderBundle.wiki">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="97" column="0" selection-start="3067" selection-end="3067" vertical-scroll-proportion="0.9170732">
           <folding />
         </state>
       </provider>
@@ -680,9 +761,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/JNIHelloWorld.java">
+    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/annotations/JNIBundle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="17" selection-start="0" selection-end="160" vertical-scroll-proportion="0.14251497">
+        <state line="14" column="18" selection-start="460" selection-end="460" vertical-scroll-proportion="0.27901524">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/annotations/JNILibrary.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="18" selection-start="577" selection-end="577" vertical-scroll-proportion="0.31887457">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/PlatformInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="129" selection-end="129" vertical-scroll-proportion="0.18257757">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wiki/JniClassLoaderBundle.wiki">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="95" column="0" selection-start="3049" selection-end="3049" vertical-scroll-proportion="0.89756095">
           <folding />
         </state>
       </provider>
@@ -696,32 +798,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/annotations/JNIBundle.java">
+    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/JNIHelloWorld.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="18" selection-start="460" selection-end="460" vertical-scroll-proportion="0.28502995">
+        <state line="7" column="17" selection-start="0" selection-end="160" vertical-scroll-proportion="0.14251497">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java">
+    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="0" selection-start="1400" selection-end="1400" vertical-scroll-proportion="0.6085919">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="56" selection-start="2109" selection-end="2115" vertical-scroll-proportion="0.14200477">
+        <state line="68" column="30" selection-start="2777" selection-end="2777" vertical-scroll-proportion="0.20731707">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java">
+    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="96" selection-start="2963" selection-end="2963" vertical-scroll-proportion="0.21479714">
+        <state line="30" column="56" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.5597561">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="142" column="23" selection-start="5777" selection-end="5777" vertical-scroll-proportion="0.6682927">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
-  <component name="ModuleRootManager" />
+  <component name="BuildJarSettings">
+    <containerInfo>
+      <containerElement type="module" name="jniClassLoader">
+        <attribute name="method" value="1" />
+        <attribute name="URI" value="/" />
+      </containerElement>
+    </containerInfo>
+    <setting name="jarUrl" value="file://$MODULE_DIR$/jniClassLoader.jar" />
+    <setting name="buildJar" value="true" />
+    <setting name="mainClass" value="" />
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <output url="file://$MODULE_DIR$/../../../classes/production/jniClassLoader" />
     <exclude-output />

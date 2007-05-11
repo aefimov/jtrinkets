@@ -6,6 +6,9 @@ import org.trinkets.ui.plaf.CalendarDayListUI;
 import javax.accessibility.Accessible;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
@@ -16,6 +19,7 @@ import java.lang.reflect.Method;
  * @author Alexey Efimov
  */
 public class JCalendarDayList extends JComponent implements Accessible {
+    private static final Point INVISIBLE_POINT = new Point(-1, -1);
     /**
      * @see #getUIClassID
      * @see #readObject
@@ -54,8 +58,46 @@ public class JCalendarDayList extends JComponent implements Accessible {
     private Color outOfMonthForeground;
     private Color outOfMonthBackground;
 
+    private final Point hoverCell = (Point) INVISIBLE_POINT.clone();
+    private final Point selectionCell = (Point) INVISIBLE_POINT.clone();
+
     public JCalendarDayList() {
+        addMouseMotionListener(new MouseMotionListener() {
+            public void mouseDragged(MouseEvent e) {
+                selectionCell.setLocation(toCellPoint(e));
+                hoverCell.setLocation(-1, -1);
+                repaint();
+            }
+
+            public void mouseMoved(MouseEvent e) {
+                hoverCell.setLocation(toCellPoint(e));
+                repaint();
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                selectionCell.setLocation(toCellPoint(e));
+                repaint();
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                selectionCell.setLocation(toCellPoint(e));
+                repaint();
+            }
+
+            public void mousePressed(MouseEvent e) {
+                selectionCell.setLocation(toCellPoint(e));
+                repaint();
+            }
+        });
         updateUI();
+    }
+
+    private Point toCellPoint(MouseEvent e) {
+        if (getUI() != null) {
+            return getUI().toCellPoint(this, e.getPoint());
+        }
+        return INVISIBLE_POINT;
     }
 
     /**
@@ -291,5 +333,13 @@ public class JCalendarDayList extends JComponent implements Accessible {
         Color oldValue = this.outOfMonthBackground;
         this.outOfMonthBackground = outOfMonthBackground;
         firePropertyChange("outOfMonthBackground", oldValue, this.outOfMonthBackground);
+    }
+
+    public Point getHoverCell() {
+        return hoverCell;
+    }
+
+    public Point getSelectionCell() {
+        return selectionCell;
     }
 }

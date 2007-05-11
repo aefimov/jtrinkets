@@ -1,5 +1,6 @@
 package org.trinkets.ui.plaf;
 
+import org.jetbrains.annotations.NotNull;
 import org.trinkets.ui.CalendarDayListCellRenderer;
 import org.trinkets.ui.CalendarDayListModel;
 import org.trinkets.ui.JCalendarDayList;
@@ -42,9 +43,12 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
 
             CalendarDayListCellRenderer weekCellRenderer = dayList.getWeekCellRenderer();
             CalendarDayListCellRenderer dayCellRenderer = dayList.getDayCellRenderer();
-
             int cellWidth = size.width / model.getDaysInWeek();
             int cellHeight = size.height / (model.getWeeksInMonth() + 3);
+
+            Point hoverCell = dayList.getHoverCell();
+            Point selectionCell = dayList.getSelectionCell();
+
             for (int i = 0; i < model.getDaysInWeek(); i++) {
                 String weekday = model.getWeekCellValue(i);
                 boolean weekend = model.isWeekendCell(i);
@@ -60,10 +64,12 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
                 }
                 for (int j = -1; j < model.getWeeksInMonth() + 1; j++) {
                     String value = model.getDayCellValue(j, i);
-                    boolean month = model.isWithinMonthCell(j, i);
-                    comp = dayCellRenderer.getCalendarDayListCellRendererComponent(dayList, value, false, false, weekend, month, j, i);
                     int y = (j + 2) * cellHeight;
                     int height = j == model.getWeeksInMonth() ? size.height - y : cellHeight;
+                    boolean month = model.isWithinMonthCell(j, i);
+                    boolean hasFocus = i == hoverCell.x && j + 1 == hoverCell.y;
+                    boolean hasSelection = i == selectionCell.x && j + 1 == selectionCell.y;
+                    comp = dayCellRenderer.getCalendarDayListCellRendererComponent(dayList, value, hasSelection, hasFocus, weekend, month, j, i);
                     comp.setBounds(x, y, width, height);
                     gc = g.create(x, y, width, height);
                     try {
@@ -182,6 +188,19 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
         return new Color(source[0], source[1], source[2], source[3]);
     }
 
+    @NotNull
+    public Point toCellPoint(@NotNull JCalendarDayList c, @NotNull Point point) {
+        Dimension size = c.getSize();
+        CalendarDayListModel model = c.getModel();
+        if (model != null) {
+            int cellWidth = size.width / model.getDaysInWeek();
+            int cellHeight = size.height / (model.getWeeksInMonth() + 3);
+            point.x = point.x / cellWidth;
+            point.y = (point.y / cellHeight) - 1;
+        }
+        return point;
+    }
+
     private static class DayRenderer extends JLabel implements CalendarDayListCellRenderer {
         public Component getCalendarDayListCellRendererComponent(JCalendarDayList dayList, Object value, boolean isSelected, boolean hasFocus, boolean weekend, boolean withinMonth, int row, int column) {
             setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -207,9 +226,10 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
                 }
             }
             if (hasFocus) {
-                setBorder(BorderFactory.createLineBorder(dayList.getSelectionForeground()));
+                setBackground(dayList.getSelectionBackground().brighter());
+                setBorder(BorderFactory.createLineBorder(dayList.getSelectionBackground()));
             } else {
-                setBorder(null);
+                setBorder(BorderFactory.createLineBorder(getBackground()));
             }
             return this;
         }

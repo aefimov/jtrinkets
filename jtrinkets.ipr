@@ -4,9 +4,8 @@
     <defaultAnt bundledAnt="true" />
   </component>
   <component name="BuildJarProjectSettings">
-    <option name="BUILD_JARS_ON_MAKE" value="false" />
+    <option name="BUILD_JARS_ON_MAKE" value="true" />
   </component>
-  <component name="ClearCase" />
   <component name="CodeStyleProjectProfileManger">
     <option name="PROJECT_PROFILE" />
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
@@ -44,12 +43,9 @@
       <entry name="?*.jar" />
     </wildcardResourcePatterns>
   </component>
-  <component name="CppTools.Loader" />
-  <component name="DataSourceManagerImpl" />
   <component name="DependenciesAnalyzeManager">
     <option name="myForwardDirection" value="false" />
   </component>
-  <component name="DependencyValidationManager" />
   <component name="EclipseCompilerSettings">
     <option name="DEBUGGING_INFO" value="true" />
     <option name="GENERATE_NO_WARNINGS" value="true" />
@@ -106,7 +102,7 @@
     <option name="DEBUGGING_INFO" value="true" />
     <option name="GENERATE_NO_WARNINGS" value="false" />
     <option name="DEPRECATION" value="true" />
-    <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:fallthrough" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
   <component name="JavadocGenerationManager">
@@ -261,6 +257,7 @@
       </item>
     </group>
   </component>
+  <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/trunk/ui/jcalendar/jcalendar.iml" filepath="$PROJECT_DIR$/trunk/ui/jcalendar/jcalendar.iml" group="ui" />
@@ -271,7 +268,6 @@
   <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
-  <component name="ProjectRunConfigurationManager" />
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
       <value>
@@ -286,12 +282,9 @@
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
-  <component name="StarteamVcsAdapter" />
-  <component name="SvnBranchConfigurationManager" />
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
   </component>
-  <component name="VssVcs" />
   <component name="com.intellij.jsf.UserDefinedFacesConfigs">
     <option name="USER_DEFINED_CONFIGS">
       <value>
@@ -299,7 +292,5 @@
       </value>
     </option>
   </component>
-  <component name="libraryTable" />
-  <component name="uidesigner-configuration" />
 </project>
 

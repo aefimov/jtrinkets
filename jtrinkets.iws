@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project relativePaths="false" version="4">
-  <component name="BookmarkManager" />
   <component name="CCaseConfig">
     <option name="implementation" value="net.sourceforge.transparent.CommandLineClearCase" />
     <option name="checkoutReserved" value="false" />
@@ -13,14 +12,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/PlatformInfo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/jcalendar.iml" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/jcalendar.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/util/jniClassLoader/jniClassLoader.iml" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/jniClassLoader.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/JCalendarDayList.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/JCalendarDayList.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jtrinkets.ipr" afterPath="$PROJECT_DIR$/jtrinkets.ipr" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/BasicCalendarDayListUI.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/BasicCalendarDayListUI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jtrinkets.iws" afterPath="$PROJECT_DIR$/jtrinkets.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jtrinkets.iml" afterPath="$PROJECT_DIR$/jtrinkets.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java" />
     </list>
   </component>
-  <component name="ChangeListSynchronizer" />
   <component name="ChangesViewManager" flattened_view="false" show_ignored="false" />
   <component name="Commander">
     <leftPanel />
@@ -35,9 +36,9 @@
     <option name="CLEAR_OUTPUT_DIRECTORY" value="false" />
     <option name="ASSERT_NOT_NULL" value="true" />
   </component>
-  <component name="CoverageDataManager" />
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
+    <option name="REVERSE_PATCH" value="false" />
   </component>
   <component name="DaemonCodeAnalyzer">
     <disable_hints />
@@ -110,62 +111,44 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="JniClassLoaderBundle.wiki" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wiki/JniClassLoaderBundle.wiki">
+      <file leaf-file-name="BasicCalendarDayListUI.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/BasicCalendarDayListUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="95" column="0" selection-start="3049" selection-end="3049" vertical-scroll-proportion="0.89756095">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JNIHelloWorldImpl.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/JNIHelloWorldImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="19" selection-start="0" selection-end="583" vertical-scroll-proportion="0.14251497">
+            <state line="70" column="72" selection-start="2823" selection-end="2823" vertical-scroll-proportion="0.4049881">
               <folding>
-                <element signature="imports" expanded="true" />
+                <marker date="1178891481047" expanded="false" signature="38:350" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TestJNIHelloWorld.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java">
+      <file leaf-file-name="TestUIComponent.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/test/org/trinkets/ui/TestUIComponent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="56" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.5597561">
+            <state line="20" column="20" selection-start="616" selection-end="616" vertical-scroll-proportion="0.31738624">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JNIClassLoader.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java">
+      <file leaf-file-name="CalendarDayListUI.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="142" column="23" selection-start="5777" selection-end="5777" vertical-scroll-proportion="0.6682927">
+            <state line="15" column="0" selection-start="334" selection-end="334" vertical-scroll-proportion="0.2975496">
               <folding>
-                <element signature="imports" expanded="true" />
+                <marker date="1178891481047" expanded="true" signature="38:170" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JNIBundleLoader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java">
+      <file leaf-file-name="JCalendarDayList.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/JCalendarDayList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="30" selection-start="2777" selection-end="2777" vertical-scroll-proportion="0.20731707">
+            <state line="94" column="0" selection-start="3903" selection-end="3903" vertical-scroll-proportion="0.630105">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JNIHelloWorld.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/JNIHelloWorld.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="17" selection-start="0" selection-end="160" vertical-scroll-proportion="0.14251497">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -195,13 +178,10 @@
     <option name="SHOW_STRUCTURE" value="true" />
     <option name="ANALYSIS_IN_BACKGROUND" value="false" />
   </component>
-  <component name="J2EEProjectPane" />
-  <component name="JspContextManager" />
   <component name="ModuleEditorState">
     <option name="LAST_EDITED_MODULE_NAME" />
     <option name="LAST_EDITED_TAB_NAME" />
   </component>
-  <component name="NamedScopeManager" />
   <component name="PackagesPane">
     <subPane>
       <PATH>
@@ -226,7 +206,6 @@
       </PATH>
     </subPane>
   </component>
-  <component name="PerforceDirect.Settings" />
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
@@ -243,49 +222,31 @@
     <subPane>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="Module:jtrinkets" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="Module:jtrinkets" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\wiki" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -293,13 +254,13 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jniClassLoader" />
+          <option name="myItemId" value="Module:jniClassLoader" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -307,7 +268,7 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jniClassLoader" />
+          <option name="myItemId" value="Module:jniClassLoader" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -317,7 +278,7 @@
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -325,7 +286,7 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jniClassLoader" />
+          <option name="myItemId" value="Module:jniClassLoader" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -333,74 +294,126 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\test\org\trinkets\util\jni" />
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\out" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="util" />
+          <option name="myItemId" value="ui" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jniClassLoader" />
+          <option name="myItemId" value="Module:jcalendar" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\src\org\trinkets\util\jni" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="util" />
+          <option name="myItemId" value="ui" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jniClassLoader" />
+          <option name="myItemId" value="Module:jcalendar" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\src\org\trinkets\util\jni" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\src\org\trinkets\util\jni\annotations" />
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="jtrinkets" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ui" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Module:jcalendar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\test" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\test\org\trinkets\ui" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiClass:TestUIComponent" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ui" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Module:jcalendar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src\org\trinkets\ui" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ui" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Module:jcalendar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src\org\trinkets\ui" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src\org\trinkets\ui\plaf" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
     </subPane>
@@ -419,7 +432,7 @@
         </option>
       </SplitterProportionsDataImpl>
     </option>
-    <option name="lastEditedConfigurable" value="jtrinkets" />
+    <option name="lastEditedConfigurable" value="jcalendar" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="0.16666667" version="1" splitterProportion="0.5">
@@ -484,26 +497,18 @@
       <recent name="org.trinkets.ui.plaf" />
     </key>
   </component>
-  <component name="RestoreUpdateTree" />
-  <component name="RunManager" selected="JUnit.TestJNIHelloWorld">
-    <tempConfiguration default="false" name="TestJNIHelloWorld" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
-      <pattern value="org.trinkets.util.jni.*" />
-      <module name="jniClassLoader" />
+  <component name="RunManager" selected="Application.TestUIComponent">
+    <tempConfiguration default="false" name="TestUIComponent" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" value="org.trinkets.ui.TestUIComponent" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="PACKAGE_NAME" value="org.trinkets.util.jni" />
-      <option name="MAIN_CLASS_NAME" value="org.trinkets.util.jni.TestJNIHelloWorld" />
-      <option name="METHOD_NAME" value="testClassLoader" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ADDITIONAL_CLASS_PATH" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="wholeProject" />
-      </option>
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <module name="jcalendar" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="3850" />
+        <option name="DEBUG_PORT" value="2263" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
@@ -527,13 +532,6 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-    </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -545,6 +543,13 @@
       <option name="VM_PARAMETERS" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <module name="" />
@@ -572,8 +577,15 @@
   </component>
   <component name="ScopeChooserConfigurable.UI">
     <option name="proportions">
-      <SplitterProportionsDataImpl />
+      <SplitterProportionsDataImpl>
+        <option name="proportions">
+          <collection>
+            <option value="0.16666667" />
+          </collection>
+        </option>
+      </SplitterProportionsDataImpl>
     </option>
+    <option name="lastEditedConfigurable" value="Local Scopes" />
   </component>
   <component name="ScopeViewComponent">
     <subPane subId="Project">
@@ -585,7 +597,6 @@
       </PATH>
     </subPane>
   </component>
-  <component name="ShelveChangesManager" />
   <component name="StarteamConfiguration">
     <option name="SERVER" value="" />
     <option name="PORT" value="49201" />
@@ -597,7 +608,6 @@
     <option name="LOCK_ON_CHECKOUT" value="false" />
     <option name="UNLOCK_ON_CHECKIN" value="false" />
   </component>
-  <component name="StructuralSearchPlugin" />
   <component name="StructureViewFactory">
     <option name="AUTOSCROLL_MODE" value="true" />
     <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
@@ -631,22 +641,23 @@
     <editor active="true" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29683697" order="0" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32927817" order="3" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277027" order="7" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29683697" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3280543" order="1" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24979724" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" order="8" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="6" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24979724" order="1" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33144796" order="8" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" order="2" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24979724" order="2" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6617647" order="3" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="0" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32882884" order="2" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31224656" order="2" />
+      <window_info id="Картинки" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995495" order="-1" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2454955" order="3" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3998378" order="0" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" order="8" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
@@ -664,7 +675,7 @@
     <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Documentation and fixes for JNI class loader" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add mouse events to component" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
@@ -678,6 +689,8 @@
     <MESSAGE value="First visual working calendar control" />
     <MESSAGE value="Documentation and fixes" />
     <MESSAGE value="Documentation and fixes for JNI class loader" />
+    <MESSAGE value="Allow to multiple loading" />
+    <MESSAGE value="Add mouse events to component" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -719,111 +732,111 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/RetentionPolicy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="43" selection-start="815" selection-end="815" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/Retention.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="16" selection-start="722" selection-end="722" vertical-scroll-proportion="0.36646706">
+        <state line="23" column="17" selection-start="723" selection-end="723" vertical-scroll-proportion="1.2592592">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/Target.java">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/util/Iterator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="18" selection-start="1585" selection-end="1585" vertical-scroll-proportion="1.2700186">
+        <state line="42" column="17" selection-start="1270" selection-end="1270" vertical-scroll-proportion="0.348503">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/Documented.java">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/util/concurrent/Executors.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="18" selection-start="768" selection-end="768" vertical-scroll-proportion="0.38682634">
+        <state line="42" column="13" selection-start="1595" selection-end="1595" vertical-scroll-proportion="-0.041463416">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wiki/Agenda.wiki">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/net/URL.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="1020" column="32" selection-start="37897" selection-end="37897" vertical-scroll-proportion="0.18922156">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/util/SystemInfo.class">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/net/URLConnection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="42" selection-start="270" selection-end="270" vertical-scroll-proportion="0.12215569">
+        <state line="682" column="33" selection-start="26594" selection-end="26594" vertical-scroll-proportion="0.19634147">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/Inherited.java">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/org/w3c/dom/Document.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="18" selection-start="1286" selection-end="1286" vertical-scroll-proportion="0.5497006">
+        <state line="198" column="17" selection-start="10043" selection-end="10043" vertical-scroll-proportion="0.1">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/annotations/JNIBundle.java">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/org/w3c/dom/NodeList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="18" selection-start="460" selection-end="460" vertical-scroll-proportion="0.27901524">
+        <state line="22" column="17" selection-start="1032" selection-end="1032" vertical-scroll-proportion="0.24878049">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/annotations/JNILibrary.java">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/net/ServerSocket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="18" selection-start="577" selection-end="577" vertical-scroll-proportion="0.31887457">
+        <state line="414" column="18" selection-start="14395" selection-end="14395" vertical-scroll-proportion="0.104191616">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/PlatformInfo.java">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/com/sun/org/apache/xpath/internal/operations/String.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="129" selection-end="129" vertical-scroll-proportion="0.18257757">
+        <state line="26" column="13" selection-start="929" selection-end="929" vertical-scroll-proportion="0.16287425">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wiki/JniClassLoaderBundle.wiki">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/String.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="0" selection-start="3049" selection-end="3049" vertical-scroll-proportion="0.89756095">
+        <state line="83" column="48" selection-start="3434" selection-end="3434" vertical-scroll-proportion="0.5597561">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/JNIHelloWorldImpl.java">
+    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="19" selection-start="0" selection-end="583" vertical-scroll-proportion="0.14251497">
+        <state line="15" column="0" selection-start="334" selection-end="334" vertical-scroll-proportion="0.2975496">
           <folding>
-            <element signature="imports" expanded="true" />
+            <marker date="1178891481047" expanded="true" signature="38:170" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/JNIHelloWorld.java">
+    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/test/org/trinkets/ui/TestUIComponent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="17" selection-start="0" selection-end="160" vertical-scroll-proportion="0.14251497">
+        <state line="20" column="20" selection-start="616" selection-end="616" vertical-scroll-proportion="0.31738624">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIBundleLoader.java">
+    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/BasicCalendarDayListUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="30" selection-start="2777" selection-end="2777" vertical-scroll-proportion="0.20731707">
+        <state line="70" column="72" selection-start="2823" selection-end="2823" vertical-scroll-proportion="0.4049881">
           <folding>
-            <element signature="imports" expanded="true" />
+            <marker date="1178891481047" expanded="false" signature="38:350" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/test/org/trinkets/util/jni/TestJNIHelloWorld.java">
+    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/JCalendarDayList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="56" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.5597561">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/util/jniClassLoader/src/org/trinkets/util/jni/JNIClassLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="23" selection-start="5777" selection-end="5777" vertical-scroll-proportion="0.6682927">
+        <state line="94" column="0" selection-start="3903" selection-end="3903" vertical-scroll-proportion="0.630105">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

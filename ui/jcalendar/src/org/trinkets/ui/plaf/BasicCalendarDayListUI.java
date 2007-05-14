@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.trinkets.ui.CalendarDayListCellRenderer;
 import org.trinkets.ui.CalendarDayListModel;
+import org.trinkets.ui.DefaultCalendarDayListModel;
 import org.trinkets.ui.JCalendarDayList;
 
 import javax.swing.*;
@@ -105,7 +106,7 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
             int cellHeight = metrics.getHeight();
 
             int width = (cellWidth + 20) * model.getDaysInWeek();
-            int height = (cellHeight + 10) * (model.getWeeksInMonth() + 3);
+            int height = (cellHeight + 10) * (model.getWeeksInMonth() + 2);
             return new Dimension(width, height);
         }
         return super.getMinimumSize(c);

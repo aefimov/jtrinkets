@@ -1,5 +1,6 @@
 package org.trinkets.ui.plaf;
 
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.trinkets.ui.CalendarDayListCellRenderer;
 import org.trinkets.ui.CalendarDayListModel;
@@ -17,6 +18,10 @@ import java.util.Locale;
  * @author Alexey Efimov
  */
 public class BasicCalendarDayListUI extends CalendarDayListUI {
+    @NonNls
+    private static final String CLIENT_PROPERTY_HOVER_CELL = "hover.cell";
+    @NonNls
+    private static final String CLIENT_PROPERTY_SELECTION_CELL = "selection.cell";
     // Shared UI object
     private static CalendarDayListUI ui;
 
@@ -46,8 +51,8 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
             int cellWidth = size.width / model.getDaysInWeek();
             int cellHeight = size.height / (model.getWeeksInMonth() + 3);
 
-            Point hoverCell = dayList.getHoverCell();
-            Point selectionCell = dayList.getSelectionCell();
+            Point hoverCell = getHoverCell(dayList);
+            Point selectionCell = getSelectionCell(dayList);
 
             for (int i = 0; i < model.getDaysInWeek(); i++) {
                 String weekday = model.getWeekCellValue(i);
@@ -67,8 +72,8 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
                     int y = (j + 2) * cellHeight;
                     int height = j == model.getWeeksInMonth() ? size.height - y : cellHeight;
                     boolean month = model.isWithinMonthCell(j, i);
-                    boolean hasFocus = i == hoverCell.x && j + 1 == hoverCell.y;
-                    boolean hasSelection = i == selectionCell.x && j + 1 == selectionCell.y;
+                    boolean hasFocus = hoverCell != null && i == hoverCell.x && j + 1 == hoverCell.y;
+                    boolean hasSelection = selectionCell != null && i == selectionCell.x && j + 1 == selectionCell.y;
                     comp = dayCellRenderer.getCalendarDayListCellRendererComponent(dayList, value, hasSelection, hasFocus, weekend, month, j, i);
                     comp.setBounds(x, y, width, height);
                     gc = g.create(x, y, width, height);
@@ -201,6 +206,37 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
         return point;
     }
 
+    public void setHoverCell(@NotNull JCalendarDayList c, Point point) {
+        c.putClientProperty(CLIENT_PROPERTY_HOVER_CELL, point);
+        setToolTipText(c, point);
+    }
+
+    public void setSelectionCell(@NotNull JCalendarDayList c, Point point) {
+        c.putClientProperty(CLIENT_PROPERTY_SELECTION_CELL, point);
+        setToolTipText(c, point);
+    }
+
+    private void setToolTipText(JCalendarDayList c, Point point) {
+        CalendarDayListModel model = c.getModel();
+        if (model != null) {
+            if (point != null) {
+                c.setToolTipText(model.getToolTipTextAt(point.y - 1, point.x));
+            } else {
+                c.setToolTipText(null);
+            }
+        } else {
+            c.setToolTipText(null);
+        }
+    }
+
+    public Point getHoverCell(@NotNull JCalendarDayList c) {
+        return (Point) c.getClientProperty(CLIENT_PROPERTY_HOVER_CELL);
+    }
+
+    public Point getSelectionCell(@NotNull JCalendarDayList c) {
+        return (Point) c.getClientProperty(CLIENT_PROPERTY_SELECTION_CELL);
+    }
+
     private static class DayRenderer extends JLabel implements CalendarDayListCellRenderer {
         public Component getCalendarDayListCellRendererComponent(JCalendarDayList dayList, Object value, boolean isSelected, boolean hasFocus, boolean weekend, boolean withinMonth, int row, int column) {
             setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -208,6 +244,7 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
             setText((String) value);
             setFont(dayList.getDayFont());
             setOpaque(true);
+            setEnabled(dayList.isEnabled());
             if (isSelected) {
                 setForeground(dayList.getSelectionForeground());
                 setBackground(dayList.getSelectionBackground());
@@ -242,6 +279,7 @@ public class BasicCalendarDayListUI extends CalendarDayListUI {
             setText((String) value);
             setFont(dayList.getWeekFont());
             setOpaque(true);
+            setEnabled(dayList.isEnabled());
             if (weekend) {
                 setForeground(mix(dayList.getWeekendForeground(), dayList.getHeaderForeground()));
                 setBackground(mix(dayList.getWeekendBackground(), dayList.getHeaderBackground()));

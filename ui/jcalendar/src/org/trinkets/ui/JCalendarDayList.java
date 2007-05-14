@@ -12,6 +12,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
+import java.util.Calendar;
 
 /**
  * UI component for {@link java.util.Calendar}.
@@ -19,7 +20,6 @@ import java.lang.reflect.Method;
  * @author Alexey Efimov
  */
 public class JCalendarDayList extends JComponent implements Accessible {
-    private static final Point INVISIBLE_POINT = new Point(-1, -1);
     /**
      * @see #getUIClassID
      * @see #readObject
@@ -44,6 +44,8 @@ public class JCalendarDayList extends JComponent implements Accessible {
         UIManager.put("CalendarDayList.weekFont", UIManager.getFont("Label.font").deriveFont(Font.BOLD));
     }
 
+    private final MouseListennerImpl mouseListenner = new MouseListennerImpl();
+
     private CalendarDayListModel model;
     private CalendarDayListCellRenderer dayCellRenderer;
     private CalendarDayListCellRenderer weekCellRenderer;
@@ -58,46 +60,26 @@ public class JCalendarDayList extends JComponent implements Accessible {
     private Color outOfMonthForeground;
     private Color outOfMonthBackground;
 
-    private final Point hoverCell = (Point) INVISIBLE_POINT.clone();
-    private final Point selectionCell = (Point) INVISIBLE_POINT.clone();
-
     public JCalendarDayList() {
-        addMouseMotionListener(new MouseMotionListener() {
-            public void mouseDragged(MouseEvent e) {
-                selectionCell.setLocation(toCellPoint(e));
-                hoverCell.setLocation(-1, -1);
-                repaint();
-            }
-
-            public void mouseMoved(MouseEvent e) {
-                hoverCell.setLocation(toCellPoint(e));
-                repaint();
-            }
-        });
-        addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                selectionCell.setLocation(toCellPoint(e));
-                repaint();
-            }
-
-            public void mouseReleased(MouseEvent e) {
-                selectionCell.setLocation(toCellPoint(e));
-                repaint();
-            }
-
-            public void mousePressed(MouseEvent e) {
-                selectionCell.setLocation(toCellPoint(e));
-                repaint();
-            }
-        });
+        addMouseMotionListener(mouseListenner);
+        addMouseListener(mouseListenner);
         updateUI();
     }
 
-    private Point toCellPoint(MouseEvent e) {
-        if (getUI() != null) {
-            return getUI().toCellPoint(this, e.getPoint());
+    private void setUIHoverCell(Point point) {
+        CalendarDayListUI ui = getUI();
+        if (ui != null) {
+            ui.setHoverCell(this, point != null ? ui.toCellPoint(this, point) : null);
+            repaint();
         }
-        return INVISIBLE_POINT;
+    }
+
+    private void setUISelectionCell(Point point) {
+        CalendarDayListUI ui = getUI();
+        if (ui != null) {
+            ui.setSelectionCell(this, point != null ? ui.toCellPoint(this, point) : null);
+            repaint();
+        }
     }
 
     /**
@@ -335,11 +317,70 @@ public class JCalendarDayList extends JComponent implements Accessible {
         firePropertyChange("outOfMonthBackground", oldValue, this.outOfMonthBackground);
     }
 
-    public Point getHoverCell() {
-        return hoverCell;
+    public Calendar getSelectedDate() {
+        CalendarDayListModel model = getModel();
+        CalendarDayListUI ui = getUI();
+        if (model != null && ui != null) {
+            Point selectionCell = ui.getSelectionCell(this);
+            return selectionCell != null ? model.getValueAt(selectionCell.y - 1, selectionCell.x) : null;
+        }
+        return null;
     }
 
-    public Point getSelectionCell() {
-        return selectionCell;
+    public void setSelectedDate(Calendar calendar) {
+        CalendarDayListUI ui = getUI();
+        if (ui != null) {
+            Calendar oldValue = getSelectedDate();
+            ui.setSelectionCell(this, null);
+            CalendarDayListModel model = getModel();
+            if (model != null) {
+                int week = model.weekIndexOf(calendar);
+                int day = model.weekDayIndexOf(calendar);
+                if (day != -1) {
+                    ui.setSelectionCell(this, new Point(day, week + 1));
+                }
+            }
+            firePropertyChange("selectedDate", oldValue, getSelectedDate());
+            repaint();
+        }
+    }
+
+    private class MouseListennerImpl extends MouseAdapter implements MouseMotionListener {
+        public void mouseExited(MouseEvent e) {
+            if (isEnabled()) {
+                setUIHoverCell(null);
+            }
+        }
+
+        public void mouseClicked(MouseEvent e) {
+            if (isEnabled()) {
+                setUISelectionCell(e.getPoint());
+            }
+        }
+
+        public void mouseReleased(MouseEvent e) {
+            if (isEnabled()) {
+                setUISelectionCell(e.getPoint());
+            }
+        }
+
+        public void mousePressed(MouseEvent e) {
+            if (isEnabled()) {
+                setUISelectionCell(e.getPoint());
+            }
+        }
+
+        public void mouseDragged(MouseEvent e) {
+            if (isEnabled()) {
+                setUISelectionCell(e.getPoint());
+                setUIHoverCell(null);
+            }
+        }
+
+        public void mouseMoved(MouseEvent e) {
+            if (isEnabled()) {
+                setUIHoverCell(e.getPoint());
+            }
+        }
     }
 }

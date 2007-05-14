@@ -12,14 +12,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/jcalendar.iml" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/jcalendar.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/util/jniClassLoader/jniClassLoader.iml" afterPath="$PROJECT_DIR$/trunk/util/jniClassLoader/jniClassLoader.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/DefaultCalendarDayListModel.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/DefaultCalendarDayListModel.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/JCalendarDayList.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/JCalendarDayList.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jtrinkets.ipr" afterPath="$PROJECT_DIR$/jtrinkets.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/BasicCalendarDayListUI.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/BasicCalendarDayListUI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jtrinkets.iws" afterPath="$PROJECT_DIR$/jtrinkets.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jtrinkets.iml" afterPath="$PROJECT_DIR$/jtrinkets.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/test/org/trinkets/ui/TestUIComponent.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/test/org/trinkets/ui/TestUIComponent.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/CalendarDayListModel.java" afterPath="$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/CalendarDayListModel.java" />
     </list>
   </component>
   <component name="ChangesViewManager" flattened_view="false" show_ignored="false" />
@@ -114,19 +113,10 @@
       <file leaf-file-name="BasicCalendarDayListUI.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/BasicCalendarDayListUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="72" selection-start="2823" selection-end="2823" vertical-scroll-proportion="0.4049881">
+            <state line="219" column="29" selection-start="9030" selection-end="9030" vertical-scroll-proportion="8.479713">
               <folding>
-                <marker date="1178891481047" expanded="false" signature="38:350" placeholder="..." />
+                <marker date="1179132347488" expanded="false" signature="38:391" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TestUIComponent.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/test/org/trinkets/ui/TestUIComponent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="20" selection-start="616" selection-end="616" vertical-scroll-proportion="0.31738624">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -134,21 +124,84 @@
       <file leaf-file-name="CalendarDayListUI.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="0" selection-start="334" selection-end="334" vertical-scroll-proportion="0.2975496">
+            <state line="16" column="30" selection-start="442" selection-end="442" vertical-scroll-proportion="0.47004607">
               <folding>
-                <marker date="1178891481047" expanded="true" signature="38:170" placeholder="..." />
+                <marker date="1179132787582" expanded="true" signature="38:170" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JCalendarDayList.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="JCalendarDayList.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/JCalendarDayList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="94" column="0" selection-start="3903" selection-end="3903" vertical-scroll-proportion="0.630105">
+            <state line="361" column="60" selection-start="12518" selection-end="12518" vertical-scroll-proportion="13.6705065">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JComponent.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/javax/swing/JComponent.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2886" column="16" selection-start="102694" selection-end="102694" vertical-scroll-proportion="1.0596659">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CalendarDayListModel.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/CalendarDayListModel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="74" column="15" selection-start="2239" selection-end="2239" vertical-scroll-proportion="0.99308753">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultCalendarDayListModel.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/DefaultCalendarDayListModel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="29" selection-start="820" selection-end="820" vertical-scroll-proportion="-3.3479264">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SimpleDateFormat.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/text/SimpleDateFormat.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="318" column="58" selection-start="13355" selection-end="13355" vertical-scroll-proportion="-55.299538">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestUIComponent.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/test/org/trinkets/ui/TestUIComponent.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="51" selection-start="295" selection-end="295" vertical-scroll-proportion="0.21658987">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Calendar.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/util/Calendar.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="548" column="28" selection-start="24198" selection-end="24198" vertical-scroll-proportion="-0.032258064">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GregorianCalendar.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/util/GregorianCalendar.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="573" column="11" selection-start="22427" selection-end="22427" vertical-scroll-proportion="0.6705069">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -222,85 +275,13 @@
     <subPane>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1715c20" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Module:jtrinkets" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Module:jtrinkets" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="util" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Module:jniClassLoader" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="util" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Module:jniClassLoader" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="util" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Module:jniClassLoader" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\util\jniClassLoader\out" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1715c20" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -314,7 +295,7 @@
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1715c20" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -332,7 +313,7 @@
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1715c20" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -362,7 +343,7 @@
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
+          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1715c20" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -383,36 +364,6 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src\org\trinkets\ui" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="com.intellij.openapi.project.impl.ProjectImpl@1e0123b" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="ui" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Module:jcalendar" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src\org\trinkets\ui" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Documents and Settings\ae230033\My Documents\My Projects\mics\jtrinkets\trunk\ui\jcalendar\src\org\trinkets\ui\plaf" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -442,7 +393,7 @@
       <showLibraryContents />
       <hideEmptyPackages />
       <abbreviatePackageNames />
-      <showStructure ProjectPane="false" Scope="false" PackagesPane="false" Favorites="false" />
+      <showStructure Favorites="false" Scope="false" PackagesPane="false" ProjectPane="false" />
       <autoscrollToSource />
       <autoscrollFromSource />
       <sortByType />
@@ -457,6 +408,7 @@
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="31" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder4" value="4" />
+    <property name="INTRODUCE_CONSTANT_NONNLS" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="101" />
     <property name="MemberChooser.showClasses" value="true" />
@@ -519,6 +471,18 @@
         <option name="Make" value="true" />
       </method>
     </tempConfiguration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
@@ -531,18 +495,6 @@
       <method>
         <option name="Make" value="true" />
       </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
     </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -643,8 +595,8 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32927817" order="3" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277027" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29683697" order="0" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3280543" order="1" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29683697" order="0" x="457" y="53" width="366" height="888" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277027" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24979724" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" order="8" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="6" />
@@ -655,16 +607,16 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33144796" order="8" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32882884" order="2" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31224656" order="2" />
-      <window_info id="Картинки" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995495" order="-1" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2454955" order="3" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4481982" order="3" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3998378" order="0" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" order="8" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="0" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
       <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="4" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="5" />
+      <window_info id="Картинки" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995495" order="8" />
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
@@ -675,7 +627,7 @@
     <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add mouse events to component" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add setSelectedDate/getSelectedDate, cosmetic fixes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
@@ -691,6 +643,7 @@
     <MESSAGE value="Documentation and fixes for JNI class loader" />
     <MESSAGE value="Allow to multiple loading" />
     <MESSAGE value="Add mouse events to component" />
+    <MESSAGE value="Add setSelectedDate/getSelectedDate, cosmetic fixes" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -732,48 +685,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/RetentionPolicy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="43" selection-start="815" selection-end="815" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/lang/annotation/Retention.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="17" selection-start="723" selection-end="723" vertical-scroll-proportion="1.2592592">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/util/Iterator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="17" selection-start="1270" selection-end="1270" vertical-scroll-proportion="0.348503">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/util/concurrent/Executors.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="13" selection-start="1595" selection-end="1595" vertical-scroll-proportion="-0.041463416">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/net/URL.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1020" column="32" selection-start="37897" selection-end="37897" vertical-scroll-proportion="0.18922156">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/net/URLConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="682" column="33" selection-start="26594" selection-end="26594" vertical-scroll-proportion="0.19634147">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/org/w3c/dom/Document.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="198" column="17" selection-start="10043" selection-end="10043" vertical-scroll-proportion="0.1">
@@ -809,37 +720,79 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/util/GregorianCalendar.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="334" selection-end="334" vertical-scroll-proportion="0.2975496">
-          <folding>
-            <marker date="1178891481047" expanded="true" signature="38:170" placeholder="..." />
-          </folding>
+        <state line="573" column="11" selection-start="22427" selection-end="22427" vertical-scroll-proportion="0.6705069">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/test/org/trinkets/ui/TestUIComponent.java">
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/util/Calendar.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="20" selection-start="616" selection-end="616" vertical-scroll-proportion="0.31738624">
+        <state line="548" column="28" selection-start="24198" selection-end="24198" vertical-scroll-proportion="-0.032258064">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/CalendarDayListModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="15" selection-start="2239" selection-end="2239" vertical-scroll-proportion="0.99308753">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/java/text/SimpleDateFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="318" column="58" selection-start="13355" selection-end="13355" vertical-scroll-proportion="-55.299538">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/TOOLS/java/jdk1.5.0_11/src.zip!/javax/swing/JComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2886" column="16" selection-start="102694" selection-end="102694" vertical-scroll-proportion="1.0596659">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/CalendarDayListUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="30" selection-start="442" selection-end="442" vertical-scroll-proportion="0.47004607">
+          <folding>
+            <marker date="1179132787582" expanded="true" signature="38:170" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/BasicCalendarDayListUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="72" selection-start="2823" selection-end="2823" vertical-scroll-proportion="0.4049881">
+        <state line="219" column="29" selection-start="9030" selection-end="9030" vertical-scroll-proportion="8.479713">
           <folding>
-            <marker date="1178891481047" expanded="false" signature="38:350" placeholder="..." />
+            <marker date="1179132347488" expanded="false" signature="38:391" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/JCalendarDayList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="0" selection-start="3903" selection-end="3903" vertical-scroll-proportion="0.630105">
+        <state line="361" column="60" selection-start="12518" selection-end="12518" vertical-scroll-proportion="13.6705065">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/src/org/trinkets/ui/plaf/DefaultCalendarDayListModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="29" selection-start="820" selection-end="820" vertical-scroll-proportion="-3.3479264">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/ui/jcalendar/test/org/trinkets/ui/TestUIComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="51" selection-start="295" selection-end="295" vertical-scroll-proportion="0.21658987">
+          <folding />
         </state>
       </provider>
     </entry>

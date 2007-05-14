@@ -195,6 +195,7 @@ public class JCalendarDayList extends JComponent implements Accessible {
         CalendarDayListModel oldValue = this.model;
         this.model = model;
         firePropertyChange("model", oldValue, this.model);
+        repaint();
     }
 
     public CalendarDayListCellRenderer getDayCellRenderer() {

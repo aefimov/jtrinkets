@@ -1,6 +1,4 @@
-package org.trinkets.ui.plaf;
-
-import org.trinkets.ui.CalendarDayListModel;
+package org.trinkets.ui;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -60,7 +58,7 @@ public class DefaultCalendarDayListModel implements CalendarDayListModel {
     }
 
     public int getWeeksInMonth() {
-        return calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+        return 5;
     }
 
     public int getDaysInWeek() {
@@ -122,5 +120,9 @@ public class DefaultCalendarDayListModel implements CalendarDayListModel {
     public int weekDayIndexOf(Calendar calendar) {
         int delta = this.calendar.getFirstDayOfWeek() - Calendar.SUNDAY;
         return calendar.get(Calendar.DAY_OF_WEEK) - 1 - delta;
+    }
+
+    public Calendar getBaseValue() {
+        return (Calendar) calendar.clone();
     }
 }

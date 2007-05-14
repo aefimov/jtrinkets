@@ -89,4 +89,6 @@ public interface CalendarDayListModel {
      * @return Week day index from <code>0</code>
      */
     int weekDayIndexOf(Calendar calendar);
+
+    Calendar getBaseValue();
 }

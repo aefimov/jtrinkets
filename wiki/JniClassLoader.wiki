@@ -9,3 +9,6 @@ The jniClassLoader module is trinket component with already implemented such cla
   * Loading libraries from anywhere
   * Loading libraries from [JniClassLoaderBundle bundles].
   * Easy loading libraries with [JniClassLoaderAnnotations JNI annotations]
+
+= Tutorials =
+  * [JniClassLoaderStepByStep Three steps to start using jniClassLoader]

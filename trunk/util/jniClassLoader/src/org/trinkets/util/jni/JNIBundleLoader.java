@@ -123,9 +123,9 @@ public class JNIBundleLoader {
                     File file = new File(dir, libraryName);
                     file.deleteOnExit();
                     FileOutputStream fileOutputStream = new FileOutputStream(file);
-                    InputStream inputStream = new BufferedInputStream(resource.getInputStream(), 1024);
+                    InputStream inputStream = new BufferedInputStream(resource.getInputStream());
                     try {
-                        byte[] buffer = new byte[1024];
+                        byte[] buffer = new byte[10 * 1024];
                         for (int n = inputStream.read(buffer); n != -1; n = inputStream.read(buffer)) {
                             fileOutputStream.write(buffer, 0, n);
                         }

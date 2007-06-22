@@ -5,19 +5,22 @@ import org.jetbrains.annotations.NotNull;
 import org.trinkets.util.jni.annotations.JNILibrary;
 import sun.reflect.Reflection;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.security.ProtectionDomain;
 import java.security.SecureClassLoader;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * JNI Class Loader help to load custom JNI libraries without any puting native libraries into ${java.library.path}
@@ -139,36 +142,27 @@ public class JNIClassLoader extends SecureClassLoader {
         URL classURL = getResource(name.replace('.', '/').concat(".class"));
         if (classURL != null) {
             try {
-                ReadableByteChannel ch = Channels.newChannel(classURL.openStream());
+                InputStream inputStream = classURL.openStream();
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 try {
-                    List<ByteBuffer> buffers = new LinkedList<ByteBuffer>();
-                    ByteBuffer buffer;
-                    try {
-                        int size = 0;
-                        int readed;
-                        while ((readed = ch.read(buffer = ByteBuffer.allocate(1024))) > 0) {
-                            buffers.add((ByteBuffer) buffer.flip());
-                            size += readed;
-                        }
-                        if (buffers.size() == 1) {
-                            buffer = buffers.get(0);
-                        } else {
-                            buffer = ByteBuffer.allocate(size);
-                            for (ByteBuffer trunk : buffers) {
-                                buffer.put(trunk);
-                            }
-                        }
-                        Class<?> aClass = defineClass(name, buffer, (ProtectionDomain) null);
-                        definedClasses.put(name, aClass);
-                        if (listenner != null) {
-                            listenner.classPredefined(aClass);
-                        }
-                        return aClass;
-                    } finally {
-                        buffers.clear();
+                    byte[] buffer = new byte[10 * 1024];
+                    int count;
+                    while ((count = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, count);
                     }
+                    Class<?> aClass = defineClass(
+                            name,
+                            ByteBuffer.wrap(outputStream.toByteArray()),
+                            (ProtectionDomain) null
+                    );
+                    definedClasses.put(name, aClass);
+                    if (listenner != null) {
+                        listenner.classPredefined(aClass);
+                    }
+                    return aClass;
                 } finally {
-                    ch.close();
+                    inputStream.close();
+                    outputStream.close();
                 }
             } catch (IOException e) {
                 // Ignore

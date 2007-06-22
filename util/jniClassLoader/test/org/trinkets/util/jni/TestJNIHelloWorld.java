@@ -11,27 +11,22 @@ import java.lang.reflect.InvocationTargetException;
  * @author Alexey Efimov
  */
 public class TestJNIHelloWorld extends TestCase {
-    public void testBundleLoader() throws IllegalAccessException, InstantiationException {
-        String userHome = System.getProperty("user.home");
-        File librariesDir = new File(userHome, ".jni_cache");
+    private static JNIClassLoader LOADER = new JNIClassLoader(new File(System.getProperty("user.home"), ".jni_cache"));
 
-        JNIBundleLoader bundleLoader = new JNIBundleLoader(librariesDir);
-        JNIHelloWorld jniHelloWorld = bundleLoader.newJNI(JNIHelloWorldImpl.class);
+    public void testBundleLoader() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        JNIBundleLoader bundleLoader = new JNIBundleLoader(LOADER);
+        JNIHelloWorld jniHelloWorld = bundleLoader.newJNI(JNIHelloWorldImpl.class, "bob");
         jniHelloWorld.sayHello("Hello JNI World!");
-        JNIHelloWorld jniHelloWorld2 = bundleLoader.newJNI(JNIHelloWorldImpl.class);
+        JNIHelloWorld jniHelloWorld2 = bundleLoader.newJNI(JNIHelloWorldImpl.class, "sam");
         jniHelloWorld2.sayHello("Hello JNI World!");
     }
 
     @SuppressWarnings({"unchecked"})
-    public void testClassLoader() throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
-        String userHome = System.getProperty("user.home");
-        File librariesDir = new File(userHome, ".jni_cache");
-
-        JNIClassLoader jniClassLoader = new JNIClassLoader(librariesDir);
-        JNIHelloWorld jniHelloWorld = jniClassLoader.newJNI(JNIHelloWorldImpl.class);
+    public void testClassLoader() throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException {
+        JNIHelloWorld jniHelloWorld = LOADER.newJNI(JNIHelloWorldImpl.class, "bob");
         jniHelloWorld.sayHello("Hello JNI World!");
 
-        JNIHelloWorld jniHelloWorld2 = jniClassLoader.newJNI(JNIHelloWorldImpl.class);
+        JNIHelloWorld jniHelloWorld2 = LOADER.newJNI(JNIHelloWorldImpl.class, "sam");
         jniHelloWorld2.sayHello("Hello JNI World!");
     }
 }

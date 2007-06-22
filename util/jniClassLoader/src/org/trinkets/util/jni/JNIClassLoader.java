@@ -7,6 +7,7 @@ import sun.reflect.Reflection;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -19,8 +20,8 @@ import java.text.MessageFormat;
 import java.util.*;
 
 /**
- * JNI Class Loader help to load custom JNI libraries without any puting
- * native libraries into ${java.library.path} location.
+ * JNI Class Loader help to load custom JNI libraries without any puting native libraries into ${java.library.path}
+ * location.
  *
  * @author Alexey Efimov
  */
@@ -63,12 +64,48 @@ public class JNIClassLoader extends SecureClassLoader {
         }
     }
 
+    /**
+     * Create via reflection JNI wrapped object. This method can throw runtime-exceptions (wrapped exeption from
+     * reflection calls).
+     *
+     * @param implementationClass Implementation of JNI wrapped class
+     * @param parameters          Parameters passed to constructor
+     * @return Return created via reflection JNI class object
+     */
     @SuppressWarnings({"unchecked"})
     @NotNull
-    public final <T> T newJNI(@NotNull Class<? extends T> implementationClass) throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
-        Class<?> jniType = predefineClass(implementationClass.getName());
-        loadLibraries(jniType);
-        return (T) jniType.newInstance();
+    public final <T> T newJNI(@NotNull Class<? extends T> implementationClass, Object... parameters) {
+        return newJNI(implementationClass, null, parameters);
+    }
+
+    /**
+     * Create via reflection JNI wrapped object. This method can throw runtime-exceptions (wrapped exeption from
+     * reflection calls).
+     *
+     * @param implementationClass Implementation of JNI wrapped class
+     * @param parameters          Parameters passed to constructor
+     * @param listenner           Listenner for predefine operation. If class redefined this monitor will be notified.
+     * @return Return created via reflection JNI class object
+     */
+    @SuppressWarnings({"unchecked"})
+    @NotNull
+    final <T> T newJNI(@NotNull Class<? extends T> implementationClass, JNIClassLoaderListenner listenner, Object... parameters) {
+        try {
+            Class<?> jni = predefineClass(implementationClass.getName(), listenner);
+            loadLibraries(jni);
+            if (parameters.length == 0) {
+                return (T) jni.newInstance();
+            } else {
+                Class[] types = new Class[parameters.length];
+                for (int i = 0; i < parameters.length; i++) {
+                    types[i] = parameters[i].getClass();
+                }
+                Constructor<T> constructor = (Constructor<T>) jni.getDeclaredConstructor(types);
+                return constructor.newInstance(parameters);
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -80,6 +117,19 @@ public class JNIClassLoader extends SecureClassLoader {
      */
     @NotNull
     public final Class<?> predefineClass(@NotNull String name) throws ClassNotFoundException {
+        return predefineClass(name, null);
+    }
+
+    /**
+     * Assign class to be loaded via <b>this</b> classloader.
+     *
+     * @param name      Full name of class
+     * @param listenner Listenner for predefine operation. If class redefined this monitor will be notified.
+     * @return Class instance
+     * @throws ClassNotFoundException if class not found
+     */
+    @NotNull
+    final Class<?> predefineClass(@NotNull String name, JNIClassLoaderListenner listenner) throws ClassNotFoundException {
         Class<?> definedClass = definedClasses.get(name);
         if (definedClass != null) {
             // Already defined
@@ -110,6 +160,9 @@ public class JNIClassLoader extends SecureClassLoader {
                         }
                         Class<?> aClass = defineClass(name, buffer, (ProtectionDomain) null);
                         definedClasses.put(name, aClass);
+                        if (listenner != null) {
+                            listenner.classPredefined(aClass);
+                        }
                         return aClass;
                     } finally {
                         buffers.clear();

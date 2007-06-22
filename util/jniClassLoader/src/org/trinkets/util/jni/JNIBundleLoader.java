@@ -25,6 +25,7 @@ import java.util.jar.Manifest;
 public class JNIBundleLoader {
     private final Set<URL> deployedBundles = new HashSet<URL>();
     private final JNIClassLoader jniClassLoader;
+    private final JNIClassLoaderListenner listenner = new JNIClassLoaderListennerImpl();
 
     public JNIBundleLoader(@NotNull File libraryCacheDirectory) {
         this((String) null, libraryCacheDirectory);
@@ -39,53 +40,52 @@ public class JNIBundleLoader {
     }
 
     public JNIBundleLoader(@NotNull ClassLoader parent, @NonNls String libraryNamingFormat, @NotNull File libraryCacheDirectory) {
-        jniClassLoader = new JNIClassLoader(parent, libraryNamingFormat, libraryCacheDirectory);
+        this(new JNIClassLoader(parent, libraryNamingFormat, libraryCacheDirectory));
+    }
+
+    public JNIBundleLoader(@NotNull JNIClassLoader jniClassLoader) {
+        this.jniClassLoader = jniClassLoader;
     }
 
     @NotNull
-    public final <T> T newJNI(@NotNull Class<? extends T> implementationClass) throws IllegalAccessException, InstantiationException {
-        return predefineClass(implementationClass).newInstance();
+    public final <T> T newJNI(@NotNull Class<? extends T> implementationClass, Object... parameters) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        return jniClassLoader.newJNI(implementationClass, listenner, parameters);
     }
 
     /**
      * Load JNI library via special class loader.
      *
-     * @param implementationClass String reference path to implementation of JNI bundled class. Please do not refer class directly via {@link Class} object to get name, it caused class to be loaded into wrong classloader.
+     * @param implementationClass String reference path to implementation of JNI bundled class. Please do not refer
+     *                            class directly via {@link Class} object to get name, it caused class to be loaded into
+     *                            wrong classloader.
      * @return Loaded class
      */
     @SuppressWarnings({"unchecked"})
     @NotNull
     public final <T> Class<T> predefineClass(Class<? extends T> implementationClass) {
         try {
-            Class<T> jniType = (Class<T>) jniClassLoader.predefineClass(implementationClass.getName());
-            JNIBundle bundle = jniType.getAnnotation(JNIBundle.class);
-            if (bundle != null) {
-                String[] bundleURLs = bundle.value();
-                if (bundleURLs != null) {
-                    for (String bundleURL : bundleURLs) {
-                        URL resource = jniType.getResource(bundleURL);
-                        if (resource == null) {
-                            throw new FileNotFoundException("the JNI bundle not found in classpath: " + bundleURL);
-                        } else if (!deployedBundles.contains(resource)) {
-                            // Deploy bundles
-                            deployBundle(resource, jniClassLoader.getLibraryCacheDirectory());
-                            deployedBundles.add(resource);
-                        }
+            return (Class<T>) jniClassLoader.predefineClass(implementationClass.getName(), listenner);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deployBundles(Class<?> jniType) throws IOException {
+        JNIBundle bundle = jniType.getAnnotation(JNIBundle.class);
+        if (bundle != null) {
+            String[] bundleURLs = bundle.value();
+            if (bundleURLs != null) {
+                for (String bundleURL : bundleURLs) {
+                    URL resource = jniType.getResource(bundleURL);
+                    if (resource == null) {
+                        throw new FileNotFoundException("the JNI bundle not found in classpath: " + bundleURL);
+                    } else if (!deployedBundles.contains(resource)) {
+                        // Deploy bundles
+                        deployBundle(resource, jniClassLoader.getLibraryCacheDirectory());
+                        deployedBundles.add(resource);
                     }
                 }
             }
-            // Load linked libraries
-            jniClassLoader.loadLibraries(jniType);
-
-            return jniType;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -134,6 +134,17 @@ public class JNIBundleLoader {
                         fileOutputStream.close();
                     }
                 }
+            }
+        }
+    }
+
+    private class JNIClassLoaderListennerImpl implements JNIClassLoaderListenner {
+        public void classPredefined(Class<?> jniType) {
+            // Now deploy all bundles defined in class
+            try {
+                deployBundles(jniType);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }

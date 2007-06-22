@@ -1,0 +1,111 @@
+#summary Step-by-step tutorial *How to use jniClassLoader library*
+
+= Step 1: Prepare JNI bundle =
+
+You need to pack your JNI library into ZIP (or Jar) package with special manifest (placed in META-INF/MANIFEST.MF file within archive).
+
+Manifest for JNIHelloWorldBundle.jar:
+{{{
+Manifest-Version: 1.0
+
+Name: windows/JNIHelloWorld.dll
+Platform: Windows
+
+Name: windows/depended.dll
+Platform: Windows
+
+Name: linux/libJNIHelloWorld.so
+Platform: Linux
+
+Name: linux/libJNIHelloWorld.jnilib
+Platform: Mac
+}}}
+Everyone entry has special attribute — *Platform* which determinate target operating system for this binary library file. It will be unpacked only on correct platform. The platform is matching to JVM system property — os.name, by 'contains' condition.
+
+= Step 2: Split your JNI wrapper class =
+
+The main engine idea of jniClassLoader is predefine class in special classloader to enable features of loading JNI libraries from anywhere as you wish. To make this you must split your generic JNI wrapper by *interface* and *implementation* parts.
+
+The *interface* part is loaded and handle by usual classloader in common way. The *implementation* part is predefined into jniClassLoader. The implementation class is loaded in dedicated classloader with have current classloader as parent.
+
+Ok, enough to flame and let's to code! For example, we will use code for simple JNI library where only one method — `sayHello0`. It say a message by native OS dialog.
+
+JNIHelloWorld.java (before use jniClassLoader):
+{{{
+import java.text.MessageFormat;
+
+public class JNIHelloWorld {
+    static {
+        System.loadLibrary("JNIHelloWorld");
+    }
+
+    private final String user;
+
+    public JNIHelloWorld(String me) {
+        this.user = user;
+    }
+
+    public void sayHello(String hello) {
+        sayHello0(MessageFormat.format("{0}>{1}", user, hello));
+    }
+
+    private void native sayHello0(String hello);
+}
+}}}
+
+Now let's split it for jniClassLoader usage.
+
+JNIHelloWorld.java:
+{{{
+public interface JNIHelloWorld {
+    public void sayHello(String hello);
+}
+}}}
+
+And implementation (JNIHelloWorldImpl.java):
+{{{
+import org.trinkets.util.jni.annotations.JNIBundle;
+import org.trinkets.util.jni.annotations.JNILibrary;
+
+import java.text.MessageFormat;
+
+@JNILibrary("JNIHelloWorld")
+@JNIBundle("JNIHelloWorldBundle.jar")
+public final class JNIHelloWorldImpl implements JNIHelloWorld {
+    private final String user;
+
+    public JNIHelloWorldImpl(String user) {
+        this.user = user;
+    }
+
+    public void sayHello(String hello) {
+        sayHello0(MessageFormat.format("{0}>{1}", user, hello));
+    }
+
+    private native void sayHello0(String hello);
+}
+}}}
+
+= Step 3: Use it =
+
+To use it we must ask jniClassLoader create instance of `HelloWorld` class. You can do it by call method `newJNI` with or without parameters.
+{{{
+// Directory where JNI libraries will deployed
+String userHome = System.getProperty("user.home");
+File librariesDir = new File(userHome, ".jni_cache");
+
+// Create loader
+JNIBundleLoader bundleLoader = new JNIBundleLoader(librariesDir);
+
+// Create one JNI object instance 
+// (is decorator of call: new JNIHelloWorldImpl("bob"))
+JNIHelloWorld bob = bundleLoader.newJNI(JNIHelloWorldImpl.class, "bob");
+// Create another JNI object instance
+// (is decorator of call: new JNIHelloWorldImpl("sam"))
+JNIHelloWorld sam = bundleLoader.newJNI(JNIHelloWorldImpl.class, "sam");
+
+bob.sayHello("Hello Sam!");
+sam.sayHello("Hello Bob!");
+}}}
+
+

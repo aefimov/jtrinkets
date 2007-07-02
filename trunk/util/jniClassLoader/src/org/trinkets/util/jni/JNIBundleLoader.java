@@ -3,8 +3,6 @@ package org.trinkets.util.jni;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.trinkets.util.jni.annotations.JNIBundle;
-import sun.misc.Resource;
-import sun.misc.URLClassPath;
 import sun.reflect.Reflection;
 
 import java.io.*;
@@ -12,9 +10,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
 /**
@@ -101,40 +100,40 @@ public class JNIBundleLoader {
             dir.mkdirs();
             dir.deleteOnExit();
         }
-        URLClassPath ucp = new URLClassPath(new URL[]{bundleURL});
-        Resource manifestResource = ucp.getResource("META-INF/MANIFEST.MF");
-        if (manifestResource == null) {
-            throw new IllegalArgumentException(MessageFormat.format("The jar is not JNI bundle (missing manifest): {0}", bundleURL.getPath()));
-        }
-        Manifest manifest = manifestResource.getManifest();
-        Map<String, Attributes> manifestEntries = manifest.getEntries();
-        for (String entryName : manifestEntries.keySet()) {
-            Attributes attributes = manifestEntries.get(entryName);
-            String platform = attributes.getValue("Platform");
-            if (platform != null && PlatformInfo.isMatched(platform)) {
-                // Unpack library
-                Resource resource = ucp.getResource(entryName);
-                if (resource != null) {
-                    String libraryName = entryName;
-                    int si = libraryName.lastIndexOf('/');
-                    if (si != -1) {
-                        libraryName = libraryName.substring(si + 1);
-                    }
-                    File file = new File(dir, libraryName);
-                    file.deleteOnExit();
-                    FileOutputStream fileOutputStream = new FileOutputStream(file);
-                    InputStream inputStream = new BufferedInputStream(resource.getInputStream());
-                    try {
-                        byte[] buffer = new byte[10 * 1024];
-                        for (int n = inputStream.read(buffer); n != -1; n = inputStream.read(buffer)) {
-                            fileOutputStream.write(buffer, 0, n);
+        JarInputStream jar = new JarInputStream(bundleURL.openStream());
+        try {
+            Manifest manifest = jar.getManifest();
+            if (manifest == null) {
+                throw new IllegalArgumentException(MessageFormat.format("The jar is not JNI bundle (missing manifest): {0}", bundleURL.getPath()));
+            }
+            for (JarEntry nextEntry = jar.getNextJarEntry(); nextEntry != null; nextEntry = jar.getNextJarEntry()) {
+                Attributes attributes = nextEntry.getAttributes();
+                if (attributes != null) {
+                    String platform = attributes.getValue("Platform");
+                    if (platform != null && PlatformInfo.isMatched(platform)) {
+                        // Unpack library
+                        String libraryName = nextEntry.getName();
+                        int si = libraryName.lastIndexOf('/');
+                        if (si != -1) {
+                            libraryName = libraryName.substring(si + 1);
                         }
-                    } finally {
-                        inputStream.close();
-                        fileOutputStream.close();
+                        File file = new File(dir, libraryName);
+                        file.deleteOnExit();
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        InputStream inputStream = new BufferedInputStream(jar);
+                        try {
+                            byte[] buffer = new byte[10 * 1024];
+                            for (int n = inputStream.read(buffer); n != -1; n = inputStream.read(buffer)) {
+                                fileOutputStream.write(buffer, 0, n);
+                            }
+                        } finally {
+                            fileOutputStream.close();
+                        }
                     }
                 }
             }
+        } finally {
+            jar.close();
         }
     }
 

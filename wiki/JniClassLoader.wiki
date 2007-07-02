@@ -12,3 +12,6 @@ The jniClassLoader module is trinket component with already implemented such cla
 
 = Tutorials =
   * [JniClassLoaderStepByStep Three steps to start using jniClassLoader]
+
+= Real usages =
+  * [http://plugins.intellij.net/plugin/?id=1348 Windows Context Menu] plugin for [http://www.jetbrains.com/idea/ IntelliJ IDEA]

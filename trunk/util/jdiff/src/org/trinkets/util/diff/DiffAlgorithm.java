@@ -1,13 +1,10 @@
 package org.trinkets.util.diff;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Diff algorithm implementation.
  * See http://en.wikipedia.org/wiki/Longest_common_subsequence_problem.
  * <p/>
- * The result of this class is sequence of {@link org.trinkets.util.diff.DiffInstruction}s.
+ * The result of this class is sequence of {@link DiffNode}s.
  *
  * @author Alexey Efimov
  */
@@ -16,7 +13,7 @@ final class DiffAlgorithm {
     }
 
     /**
-     * Read diff from LCS matrix to list of {@link DiffInstruction}s.
+     * Read diff from LCS matrix to list of {@link DiffNode}s.
      * See http://en.wikipedia.org/wiki/Longest_common_subsequence_problem#Print_the_diff for more
      * details.
      *
@@ -25,21 +22,23 @@ final class DiffAlgorithm {
      * @param c    LCS matrix
      * @param i    LCS matrix index i
      * @param j    LCS matrix index j
-     * @param diff Result storage for {@link DiffInstruction}s.
+     * @param diff Start {@link org.trinkets.util.diff.DiffNode}.
+     * @return End {@link org.trinkets.util.diff.DiffNode}.
      */
-    private static <T> void backtrack(ArrayRange<T> x, ArrayRange<T> y, int[][] c, int i, int j, List<DiffInstruction> diff) {
+    private static <T> DiffNode backtrack(ArrayRange<T> x, ArrayRange<T> y, int[][] c, int i, int j, DiffNode diff) {
         if (i > 0 && j > 0 && equals(x.get(i - 1), y.get(j - 1))) {
-            backtrack(x, y, c, i - 1, j - 1, diff);
-            addInstruction(diff, DiffInstruction.Type.UNCHANGED, 1);
+            diff = backtrack(x, y, c, i - 1, j - 1, diff);
+            return nextNode(diff, DiffType.UNCHANGED, 1);
         } else {
             if (j > 0 && (i == 0 || c[i][j - 1] >= c[i - 1][j])) {
-                backtrack(x, y, c, i, j - 1, diff);
-                addInstruction(diff, DiffInstruction.Type.ADDED, 1);
+                diff = backtrack(x, y, c, i, j - 1, diff);
+                return nextNode(diff, DiffType.ADDED, 1);
             } else if (i > 0 && (j == 0 || c[i][j - 1] < c[i - 1][j])) {
-                backtrack(x, y, c, i - 1, j, diff);
-                addInstruction(diff, DiffInstruction.Type.REMOVED, 1);
+                diff = backtrack(x, y, c, i - 1, j, diff);
+                return nextNode(diff, DiffType.REMOVED, 1);
             }
         }
+        return diff;
     }
 
     /**
@@ -72,21 +71,28 @@ final class DiffAlgorithm {
     }
 
     /**
-     * Add single {@link DiffInstruction} into list. If
-     * previous {@link DiffInstruction} was appended with the same
-     * {@link DiffInstruction.Type} as this one, then token was appended into previous list.
+     * Add single {@link DiffNode} into list. If
+     * previous {@link DiffNode} was appended with the same
+     * {@link DiffType} as this one, then token was appended into previous list.
      *
-     * @param diff   Result list of tokens
-     * @param type   Diff type
-     * @param length Marker length
+     * @param previous Previous node
+     * @param type     Diff type
+     * @param length   Marker length
+     * @return Next node
      */
-    private static void addInstruction(List<DiffInstruction> diff, DiffInstruction.Type type, int length) {
+    private static DiffNode nextNode(DiffNode previous, DiffType type, int length) {
         // Check previous type
-        if (diff.size() > 0 && type.equals(diff.get(diff.size() - 1).getType())) {
+        if (previous != null && type.equals(previous.getType())) {
             // Append to previous with same type
-            diff.get(diff.size() - 1).add(1);
+            previous.setLength(previous.getLength() + 1);
+            return previous;
         } else {
-            diff.add(new DiffInstruction(type, length));
+            DiffNode next = new DiffNode(type, length);
+            next.setPrevious(previous);
+            if (previous != null) {
+                previous.setNext(next);
+            }
+            return next;
         }
     }
 
@@ -95,9 +101,9 @@ final class DiffAlgorithm {
      *
      * @param x X list
      * @param y Y list
-     * @return list of {@link DiffInstruction}
+     * @return list of {@link DiffNode}
      */
-    public static <T> List<DiffInstruction> compare(T[] x, T[] y) {
+    public static <T> DiffNode compare(T[] x, T[] y) {
         int startX = 0;
         int startY = 0;
         // Skip equal objects at start
@@ -117,21 +123,21 @@ final class DiffAlgorithm {
         ArrayRange<T> xRange = new ArrayRange<T>(x, startX, endX);
         ArrayRange<T> yRange = new ArrayRange<T>(y, startY, endY);
         // To build C matrix we must use only x[startX..endX] comparing to y[startY..endY]
-        List<DiffInstruction> diff = new ArrayList<DiffInstruction>();
+        DiffNode diff = null;
         if (startX > 0) {
             // Begin not changed
-            addInstruction(diff, DiffInstruction.Type.UNCHANGED, startX);
+            diff = nextNode(diff, DiffType.UNCHANGED, startX);
         }
 
         // Compute matrix of LCS (see http://en.wikipedia.org/wiki/Longest_common_subsequence_problem)
         int[][] c = lcs(xRange, yRange);
-        backtrack(xRange, yRange, c, xRange.length(), yRange.length(), diff);
+        diff = backtrack(xRange, yRange, c, xRange.length(), yRange.length(), diff);
 
         if (endX < x.length) {
             // Ending not changed
-            addInstruction(diff, DiffInstruction.Type.UNCHANGED, x.length - endX);
+            diff = nextNode(diff, DiffType.UNCHANGED, x.length - endX);
         }
-        return diff;
+        return diff.getFirst();
     }
 
     static final class ArrayRange<T> {

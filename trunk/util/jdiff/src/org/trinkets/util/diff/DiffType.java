@@ -29,5 +29,9 @@ public enum DiffType {
      * have not corresponding {@link #ADDED} instruction in 'target', then target's array will modified by addition
      * this instruction.
      */
-    VIRTUAL
+    VIRTUAL;
+
+    public static boolean isChanged(DiffType type) {
+        return !UNCHANGED.equals(type) && !VIRTUAL.equals(type);
+    }
 }

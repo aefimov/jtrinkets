@@ -8,7 +8,7 @@ package org.trinkets.util.diff;
  *
  * @author Alexey Efimov
  */
-final class DiffAlgorithm {
+public final class DiffAlgorithm {
     private DiffAlgorithm() {
     }
 
@@ -120,8 +120,8 @@ final class DiffAlgorithm {
         }
         // Now we have sequence 0..startX..endX..x.length() and
         //                      0..startY..endY..y.length()
-        ArrayRange<T> xRange = new ArrayRange<T>(x, startX, endX);
-        ArrayRange<T> yRange = new ArrayRange<T>(y, startY, endY);
+        ArrayRange<T> xRange = new ArrayRange<T>(x, startX, endX - startX);
+        ArrayRange<T> yRange = new ArrayRange<T>(y, startY, endY - startY);
         // To build C matrix we must use only x[startX..endX] comparing to y[startY..endY]
         DiffNode diff = null;
         if (startX > 0) {
@@ -137,7 +137,164 @@ final class DiffAlgorithm {
             // Ending not changed
             diff = nextNode(diff, DiffType.UNCHANGED, x.length - endX);
         }
-        return diff.getFirst();
+
+        // Join changed nodes
+        joinChanged(diff.getFirst().getLeft());
+
+        // Add virtual nodes
+        addVirtual(diff.getFirst().getLeft());
+
+        // Split opposite nodes with different length
+        splitChanged(diff.getFirst().getLeft(), x, y);
+
+        return diff.getFirst().getLeft();
+    }
+
+    private static void joinChanged(DiffNode node) {
+        while (node != null) {
+            DiffNode next = node.getNext();
+            if (next != null &&
+                !node.hasOpposite() &&
+                !next.hasOpposite() &&
+                DiffType.isChanged(node.getType()) &&
+                DiffType.isChanged(next.getType())) {
+                next.setOpposite(node);
+                next.setPrevious(node.getPrevious());
+                node.setNext(next.getNext());
+                if (DiffType.ADDED.equals(node.getType())) {
+                    if (node.hasPrevious()) {
+                        node.getPrevious().setNext(next);
+                    }
+                    if (node.hasNext()) {
+                        node.getNext().setPrevious(next);
+                    }
+                }
+            }
+            node = node.getNext();
+        }
+    }
+
+    private static void addVirtual(DiffNode node) {
+        while (node != null) {
+            if (!node.hasOpposite() &&
+                DiffType.isChanged(node.getType())) {
+                DiffNode virtual = new DiffNode(DiffType.VIRTUAL, 0);
+                virtual.setOpposite(node);
+                virtual.setNext(node.getNext());
+                virtual.setPrevious(node.getPrevious());
+                if (DiffType.ADDED.equals(node.getType())) {
+                    if (node.hasPrevious()) {
+                        node.getPrevious().setNext(virtual);
+                    }
+                    if (node.hasNext()) {
+                        node.getNext().setPrevious(virtual);
+                    }
+                }
+            }
+            node = node.getNext();
+        }
+    }
+
+    private static <T> void splitChanged(DiffNode node, T[] x, T[] y) {
+        while (node != null) {
+            if (node.hasOpposite() &&
+                DiffType.isChanged(node.getType()) &&
+                DiffType.isChanged(node.getOpposite().getType()) &&
+                node.getLength() != node.getOpposite().getLength()) {
+                int minLength = Math.min(node.getLength(), node.getOpposite().getLength());
+                if (minLength > 0) {
+                    // Try to find best diff with minimal changes
+                    DiffNode maxUnchangedDiff = null;
+                    int maxUnchanged = 0;
+                    int index = 0;
+                    int delta = Math.abs(node.getLength() - node.getOpposite().getLength());
+                    for (int i = 0; i <= delta; i++) {
+                        int xOffset = node.getLength() > minLength ? i : 0;
+                        int yOffset = node.getOpposite().getLength() > minLength ? i : 0;
+                        ArrayRange<T> xRange = new ArrayRange<T>(x, node.getOffset() + xOffset, minLength);
+                        ArrayRange<T> yRange = new ArrayRange<T>(y, node.getOpposite().getOffset() + yOffset, minLength);
+
+                        // Compare ranges
+                        DiffNode diff = backtrack(
+                            xRange, yRange,
+                            lcs(xRange, yRange),
+                            xRange.length(), yRange.length(),
+                            null
+                        );
+
+                        int unchanged = getUnchangedLength(node.getFirst().getLeft());
+                        if (unchanged > maxUnchanged) {
+                            maxUnchanged = unchanged;
+                            maxUnchangedDiff = diff;
+                            index = i;
+                        }
+                    }
+                    if (maxUnchangedDiff != null) {
+                        // We found diff with minimal changes
+                        if (node.getLength() < node.getOpposite().getLength()) {
+                            // Insert virtual before
+                            if (index > 0) {
+                                DiffNode newNode = new DiffNode(DiffType.VIRTUAL, 0);
+                                newNode.setOpposite(new DiffNode(node.getOpposite().getType(), index));
+                                node.insertBefore(newNode);
+                                node.getOpposite().setLength(node.getOpposite().getLength() - index);
+                            }
+                            // Insert virtual after
+                            if (minLength < node.getOpposite().getLength()) {
+                                int remain = node.getOpposite().getLength() - minLength;
+                                DiffNode newNode = new DiffNode(DiffType.VIRTUAL, 0);
+                                newNode.setOpposite(new DiffNode(node.getOpposite().getType(), remain));
+                                node.insertAfter(newNode);
+                                node.getOpposite().setLength(node.getOpposite().getLength() - remain);
+                            }
+                        } else {
+                            // Insert virtual before
+                            if (index > 0) {
+                                DiffNode newNode = new DiffNode(node.getOpposite().getType(), index);
+                                newNode.setOpposite(new DiffNode(DiffType.VIRTUAL, 0));
+                                node.insertBefore(newNode);
+                                node.getOpposite().insertBefore(newNode.getOpposite());
+                                node.setLength(node.getLength() - index);
+                            }
+                            // Insert virtual after
+                            if (minLength < node.getLength()) {
+                                int remain = node.getLength() - minLength;
+                                DiffNode newNode = new DiffNode(node.getType(), remain);
+                                newNode.setOpposite(new DiffNode(DiffType.VIRTUAL, 0));
+                                node.insertAfter(newNode);
+                                node.setLength(node.getLength() - remain);
+                            }
+                        }
+                        node.insertAfter(maxUnchangedDiff.getFirst().getLeft());
+
+                        node.remove();
+                        node.getOpposite().remove();
+                    }
+                }
+            }
+            node = node.getNext();
+        }
+    }
+
+    private static int getUnchangedLength(DiffNode node) {
+        int result = 0;
+        while (node != null) {
+            if (DiffType.UNCHANGED.equals(node.getType())) {
+                result += node.getLength();
+            }
+            node = node.getNext();
+        }
+        return result;
+    }
+
+    public static DiffNode splitByLength(DiffNode node, int length) {
+        DiffNode result = node;
+        while (node != null) {
+            node = node.splitByLength(length);
+            result = node.getFirst().getLeft();
+            node = node.getNext();
+        }
+        return result;
     }
 
     static final class ArrayRange<T> {
@@ -145,10 +302,10 @@ final class DiffAlgorithm {
         private final int base;
         private final int length;
 
-        public ArrayRange(T[] array, int start, int end) {
+        public ArrayRange(T[] array, int start, int length) {
             this.array = array;
             this.base = start;
-            this.length = end - start;
+            this.length = length;
         }
 
         public T get(int i) {

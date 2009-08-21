@@ -12,61 +12,8 @@ public final class Diff {
     public static <T> void compare(T[] source, T[] target, DiffMarker<T> marker) {
         DiffNode nodes = DiffAlgorithm.compare(source, target);
 
-        // Join changed nodes
-        joinChanged(nodes.getFirst());
-
-        // Add virtual nodes
-        addVirtual(nodes.getFirst());
-
         // Markup diff results
-        markup(source, target, marker, nodes.getFirst());
-    }
-
-    private static void joinChanged(DiffNode node) {
-        while (node != null) {
-            DiffNode next = node.getNext();
-            if (next != null &&
-                !node.hasOpposite() &&
-                !next.hasOpposite() &&
-                !DiffType.UNCHANGED.equals(node.getType()) &&
-                !DiffType.UNCHANGED.equals(next.getType())) {
-                next.setOpposite(node);
-                node.setOpposite(next);
-                next.setPrevious(node.getPrevious());
-                node.setNext(next.getNext());
-                if (DiffType.ADDED.equals(node.getType())) {
-                    if (node.hasPrevious()) {
-                        node.getPrevious().setNext(next);
-                    }
-                    if (node.hasNext()) {
-                        node.getNext().setPrevious(next);
-                    }
-                }
-            }
-            node = node.getNext();
-        }
-    }
-
-    private static void addVirtual(DiffNode node) {
-        while (node != null) {
-            if (!node.hasOpposite() &&
-                !DiffType.UNCHANGED.equals(node.getType())) {
-                DiffNode virtual = new DiffNode(DiffType.VIRTUAL, 0);
-                virtual.setOpposite(node);
-                node.setOpposite(virtual);
-                virtual.setNext(node.getNext());
-                virtual.setPrevious(node.getPrevious());
-                if (DiffType.ADDED.equals(node.getType())) {
-                    if (node.hasPrevious()) {
-                        node.getPrevious().setNext(virtual);
-                    }
-                    if (node.hasNext()) {
-                        node.getNext().setPrevious(virtual);
-                    }
-                }
-            }
-            node = node.getNext();
-        }
+        markup(source, target, marker, nodes.getFirst().getLeft());
     }
 
     private static <T> void markup(T[] source, T[] target, DiffMarker<T> marker, DiffNode node) {
@@ -92,7 +39,14 @@ public final class Diff {
     }
 
     public static void compareLines(String source, String target, DiffMarker<String> marker) {
-        compare(Strings.lines(source), Strings.lines(target), marker);
+        String[] sourceLines = Strings.lines(source);
+        String[] targetLines = Strings.lines(target);
+
+        DiffNode diff = DiffAlgorithm.compare(sourceLines, targetLines);
+        diff = DiffAlgorithm.splitByLength(diff.getFirst().getLeft(), 1);
+
+        // Markup diff results
+        markup(sourceLines, targetLines, marker, diff.getFirst().getLeft());
     }
 
     public static void compareWords(String source, String target, DiffMarker<String> marker) {

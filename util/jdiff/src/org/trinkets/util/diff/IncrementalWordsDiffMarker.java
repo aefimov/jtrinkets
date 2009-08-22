@@ -6,6 +6,10 @@ package org.trinkets.util.diff;
  * @author Alexey Efimov
  */
 public class IncrementalWordsDiffMarker extends IncrementalDiffMarker<Character> {
+    public IncrementalWordsDiffMarker(StringBuilderDiffMarker<Character> subMarker) {
+        this(subMarker, 0.5);
+    }
+
     public IncrementalWordsDiffMarker(StringBuilderDiffMarker<Character> subMarker, double threshold) {
         super(subMarker, threshold);
     }

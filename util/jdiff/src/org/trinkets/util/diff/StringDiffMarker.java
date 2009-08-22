@@ -6,6 +6,10 @@ package org.trinkets.util.diff;
  * @author Alexey Efimov
  */
 public class StringDiffMarker extends StringBuilderDiffMarker<String> {
+    public StringDiffMarker(StringBuilderDiffMarkupDecorator decorator) {
+        super(decorator);
+    }
+
     @Override
     protected CharSequence toCharSequence(String[] array, int offset, int length) {
         return Strings.toCharSequence(array, offset, length);

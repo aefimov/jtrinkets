@@ -11,6 +11,11 @@ public abstract class IncrementalDiffMarker<T> extends StringDiffMarker {
     private final StatisticsDiffMarker<T> statsMarker;
 
     protected IncrementalDiffMarker(StringBuilderDiffMarker<T> subMarker, double threshold) {
+        this(subMarker, threshold, subMarker.decorator);
+    }
+
+    protected IncrementalDiffMarker(StringBuilderDiffMarker<T> subMarker, double threshold, StringBuilderDiffMarkupDecorator decorator) {
+        super(decorator);
         this.threshold = threshold;
         this.subMarker = subMarker;
         this.statsMarker = new StatisticsDiffMarker<T>(subMarker);
@@ -35,9 +40,15 @@ public abstract class IncrementalDiffMarker<T> extends StringDiffMarker {
     }
 
     protected void beforeSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+        if (decorator != null) {
+            decorator.beforeSubMarkupText(sourceType, sourceResult, targetType, targetResult);
+        }
     }
 
     protected void afterSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+        if (decorator != null) {
+            decorator.afterSubMarkupText(sourceType, sourceResult, targetType, targetResult);
+        }
     }
 
     protected abstract void subCompare(CharSequence source, CharSequence target, DiffMarker<T> subMarker);

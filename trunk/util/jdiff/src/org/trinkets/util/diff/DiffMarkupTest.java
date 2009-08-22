@@ -8,8 +8,99 @@ import junit.framework.TestCase;
  * @author Alexey Efimov
  */
 public class DiffMarkupTest extends TestCase {
+    private static void appendMarkers(DiffNode.Type sourceType, StringBuilder sourceResult, DiffNode.Type targetType, StringBuilder targetResult) {
+        if (targetType.equals(DiffNode.Type.ADDED)) {
+            targetResult.append("+");
+        }
+        if (sourceType.equals(DiffNode.Type.REMOVED)) {
+            sourceResult.append("-");
+        }
+    }
+
+    private static StringBuilderDiffMarker<Character> createCharacterMarker() {
+        return new CharacterDiffMarker() {
+            @Override
+            protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                appendMarkers(sourceType, sourceResult, targetType, targetResult);
+            }
+
+            @Override
+            protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                appendMarkers(sourceType, sourceResult, targetType, targetResult);
+            }
+        };
+    }
+
+    private static StringBuilderDiffMarker<String> createStringMarker() {
+        return new StringDiffMarker() {
+            @Override
+            protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                appendMarkers(sourceType, sourceResult, targetType, targetResult);
+            }
+
+            @Override
+            protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                appendMarkers(sourceType, sourceResult, targetType, targetResult);
+            }
+        };
+    }
+
+    private static void appendSubMarkers(StringBuilder sourceResult, StringBuilder targetResult) {
+        targetResult.append("*");
+        sourceResult.append("*");
+    }
+
+    private static StringBuilderDiffMarker<String> createIncrementalMarker() {
+        return
+            new IncrementalLinesDiffMarker(
+                new IncrementalWordsDiffMarker(
+                    createCharacterMarker(),
+                    0.5) {
+                    @Override
+                    protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                        appendMarkers(sourceType, sourceResult, targetType, targetResult);
+                    }
+
+                    @Override
+                    protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                        appendMarkers(sourceType, sourceResult, targetType, targetResult);
+                    }
+
+                    @Override
+                    protected void beforeSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                        appendSubMarkers(sourceResult, targetResult);
+                    }
+
+                    @Override
+                    protected void afterSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                        appendSubMarkers(sourceResult, targetResult);
+                    }
+                },
+                0.5) {
+                @Override
+                protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                    appendMarkers(sourceType, sourceResult, targetType, targetResult);
+                }
+
+                @Override
+                protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                    appendMarkers(sourceType, sourceResult, targetType, targetResult);
+                }
+
+                @Override
+                protected void beforeSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                    appendSubMarkers(sourceResult, targetResult);
+                }
+
+                @Override
+                protected void afterSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+                    appendSubMarkers(sourceResult, targetResult);
+                }
+            };
+    }
+
     public void testCompareCharacters() {
-        PlainTextCharsDiffMarker marker = new PlainTextCharsDiffMarker();
+        StringBuilderDiffMarker<Character> marker = createCharacterMarker();
         DiffMarkup.compareChars("XMJYAUZ", "MZJAWXU", marker);
 
         assertEquals("-X-MJ-Y-AU-Z-", marker.getSourceResult());
@@ -17,7 +108,7 @@ public class DiffMarkupTest extends TestCase {
     }
 
     public void testCompareWords() {
-        PlainTextStringDiffMarker marker = new PlainTextStringDiffMarker();
+        StringBuilderDiffMarker<String> marker = createStringMarker();
         DiffMarkup.compareWords(
             "The red brown fox jumped over the roling log",
             "The brown spotted fox leaped over the rolling log",
@@ -29,7 +120,7 @@ public class DiffMarkupTest extends TestCase {
     }
 
     public void testCompareLines() {
-        PlainTextStringDiffMarker marker = new PlainTextStringDiffMarker();
+        StringBuilderDiffMarker<String> marker = createStringMarker();
         DiffMarkup.compareLines("The red brown fox\n" +
             "jumped over the roling log", "The brown spotted fox\n" +
             "leaped over the rolling log", marker);
@@ -41,7 +132,7 @@ public class DiffMarkupTest extends TestCase {
     }
 
     public void testCompareLinesIncremental() {
-        PlainTextIncrementalLinesDiffMarker marker = new PlainTextIncrementalLinesDiffMarker();
+        StringBuilderDiffMarker<String> marker = createIncrementalMarker();
         DiffMarkup.compareLines("The red brown fox\n" +
             "jumped over the roling log", "The brown spotted fox\n" +
             "leaped over the rolling log", marker);
@@ -53,7 +144,7 @@ public class DiffMarkupTest extends TestCase {
     }
 
     public void testCompareComplexLinesIncremental() {
-        PlainTextIncrementalLinesDiffMarker marker = new PlainTextIncrementalLinesDiffMarker();
+        StringBuilderDiffMarker<String> marker = createIncrementalMarker();
         DiffMarkup.compareLines(
             "aaa\n\nbbb\nccc\n\nddd\n\neee\nfff\nggg\n",
             "aaa\n\nzzz\nbbb\n\nxxx\nddd\n\nfff\nggg\nhhh\n", marker);
@@ -81,7 +172,7 @@ public class DiffMarkupTest extends TestCase {
     }
 
     public void testOneLineToTwoLines() {
-        PlainTextIncrementalLinesDiffMarker marker = new PlainTextIncrementalLinesDiffMarker();
+        StringBuilderDiffMarker<String> marker = createIncrementalMarker();
         DiffMarkup.compareLines(
             "\tbefore\n\t<option name=\"Make\" value=\"true\" />\n\tafter\n",
             "\tbefore\n\t<option name=\"AntTarget\" enabled=\"false\" />\n\t<option name=\"Make\" enabled=\"true\" />\n\tafter\n",
@@ -89,11 +180,11 @@ public class DiffMarkupTest extends TestCase {
 
         assertEquals("\tbefore\n*\t<option name=\"Make\" -value-=\"true\" />\n*\tafter\n", marker.getSourceResult());
         assertEquals("\tbefore\n+\t<option name=\"AntTarget\" enabled=\"false\" />\n+" +
-            "*\t<option name=\"Make\" +enabled+=\"true\" />*\n\tafter\n", marker.getTargetResult());
+            "*\t<option name=\"Make\" +enabled+=\"true\" />\n*\tafter\n", marker.getTargetResult());
     }
 
     public void testOneUnchangedLineToTwoLines() {
-        PlainTextIncrementalLinesDiffMarker marker = new PlainTextIncrementalLinesDiffMarker();
+        StringBuilderDiffMarker<String> marker = createIncrementalMarker();
         DiffMarkup.compareLines(
             "import java.util.List;\n\n" +
                 "import org.springframework.beans.factory.annotation.Required;\n\n" +
@@ -121,7 +212,7 @@ public class DiffMarkupTest extends TestCase {
     }
 
     public void testTwoLineToOneLine() {
-        PlainTextIncrementalLinesDiffMarker marker = new PlainTextIncrementalLinesDiffMarker();
+        StringBuilderDiffMarker<String> marker = createIncrementalMarker();
         DiffMarkup.compareLines(
             "\tbefore\n\t<option name=\"AntTarget\" enabled=\"false\" />\n\t<option name=\"Make\" enabled=\"true\" />\n\tafter\n",
             "\tbefore\n\t<option name=\"Make\" value=\"true\" />\n\tafter\n",

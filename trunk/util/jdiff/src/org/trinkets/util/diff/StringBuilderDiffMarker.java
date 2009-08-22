@@ -5,7 +5,7 @@ package org.trinkets.util.diff;
  *
  * @author Alexey Efimov
  */
-public abstract class StringBuilderDiffMarker<T> extends StatisticsDiffMarker<T> {
+public abstract class StringBuilderDiffMarker<T> implements DiffMarker<T> {
     protected final StringBuilder sourceResult = new StringBuilder();
     protected final StringBuilder targetResult = new StringBuilder();
 
@@ -17,15 +17,19 @@ public abstract class StringBuilderDiffMarker<T> extends StatisticsDiffMarker<T>
         return targetResult.toString();
     }
 
-    @Override
-    protected final void markup(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
-                          DiffNode.Type targetType, T[] target, int targetOffset, int targetLength) {
-        markupText(
+    public final void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
+                            DiffNode.Type targetType, T[] target, int targetOffset, int targetLength) {
+        apply(
             sourceType, toCharSequence(source, sourceOffset, sourceLength),
             targetType, toCharSequence(target, targetOffset, targetLength));
     }
 
-    protected void markupText(DiffNode.Type sourceType, CharSequence source, DiffNode.Type targetType, CharSequence target) {
+    public void reset() {
+        sourceResult.setLength(0);
+        targetResult.setLength(0);
+    }
+
+    protected void apply(DiffNode.Type sourceType, CharSequence source, DiffNode.Type targetType, CharSequence target) {
         beforeMarkupText(sourceType, targetType);
         sourceResult.append(source);
         targetResult.append(target);

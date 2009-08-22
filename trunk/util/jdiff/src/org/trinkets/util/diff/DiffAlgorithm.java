@@ -138,9 +138,6 @@ public final class DiffAlgorithm {
         // Split nodes
         diff = split(diff.getFirst());
 
-        // Split opposite nodes with different length
-        diff = splitChanged(diff.getFirst(), x, y);
-
         return diff.getFirst();
     }
 
@@ -177,43 +174,36 @@ public final class DiffAlgorithm {
         return previous != null ? previous.getFirst() : null;
     }
 
-    private static <T> DiffNode splitChanged(DiffNode node, T[] x, T[] y) {
+    public static <T> DiffNode splitChanged(DiffNode node, T[] x, T[] y, IncrementalDiffHandler<T> incrementalDiffHandler) {
         DiffNode previous = node != null ? node.getFirst() : null;
         while (node != null) {
             // If added items not equals to count of removed items
-            if (node.hasOpposite() &&
+            if (incrementalDiffHandler != null &&
+                node.hasOpposite() &&
                 DiffNode.Type.REMOVED.equals(node.getType()) &&
                 DiffNode.Type.ADDED.equals(node.getOpposite().getType()) &&
                 node.getLength() != node.getOpposite().getLength()) {
                 int minLength = Math.min(node.getLength(), node.getOpposite().getLength());
                 if (minLength > 0) {
                     // Try to find best diff with minimal changes
-                    DiffNode maxUnchangedDiff = null;
                     int maxUnchanged = 0;
                     int index = 0;
                     int delta = Math.abs(node.getLength() - node.getOpposite().getLength());
                     for (int i = 0; i <= delta; i++) {
                         int xOffset = node.getLength() > minLength ? i : 0;
                         int yOffset = node.getOpposite().getLength() > minLength ? i : 0;
-                        ArrayRange<T> xRange = new ArrayRange<T>(x, node.getOffset() + xOffset, minLength);
-                        ArrayRange<T> yRange = new ArrayRange<T>(y, node.getOpposite().getOffset() + yOffset, minLength);
-
                         // Compare ranges
-                        DiffNode diff = backtrack(
-                            xRange, yRange,
-                            lcs(xRange, yRange),
-                            xRange.length(), yRange.length(),
-                            null
-                        );
+                        DiffNode diff = incrementalDiffHandler.diff(
+                            x, node.getOffset() + xOffset, minLength,
+                            y, node.getOpposite().getOffset() + yOffset, minLength);
 
-                        int unchanged = getUnchangedLength(node.getFirst());
+                        int unchanged = getUnchangedLength(diff.getFirst());
                         if (unchanged > maxUnchanged) {
                             maxUnchanged = unchanged;
-                            maxUnchangedDiff = diff;
                             index = i;
                         }
                     }
-                    if (maxUnchangedDiff != null) {
+                    if (maxUnchanged > 0) {
                         // We found diff with minimal changes
                         if (node.getLength() < node.getOpposite().getLength()) {
                             // Removed items is less that added items
@@ -222,6 +212,7 @@ public final class DiffAlgorithm {
                                 DiffNode newNode = new DiffNode(DiffNode.Type.VIRTUAL, 0);
                                 newNode.setOpposite(new DiffNode(node.getOpposite().getType(), index));
                                 node.insertBefore(newNode);
+                                node.getOpposite().insertBefore(newNode.getOpposite());
                                 node.getOpposite().setLength(node.getOpposite().getLength() - index);
                             }
                             // Insert virtual after
@@ -230,12 +221,13 @@ public final class DiffAlgorithm {
                                 DiffNode newNode = new DiffNode(DiffNode.Type.VIRTUAL, 0);
                                 newNode.setOpposite(new DiffNode(node.getOpposite().getType(), remain));
                                 node.insertAfter(newNode);
+                                node.getOpposite().insertAfter(newNode.getOpposite());
                                 node.getOpposite().setLength(node.getOpposite().getLength() - remain);
                             }
                         } else {
                             // Insert virtual before
                             if (index > 0) {
-                                DiffNode newNode = new DiffNode(node.getOpposite().getType(), index);
+                                DiffNode newNode = new DiffNode(node.getType(), index);
                                 newNode.setOpposite(new DiffNode(DiffNode.Type.VIRTUAL, 0));
                                 node.insertBefore(newNode);
                                 node.getOpposite().insertBefore(newNode.getOpposite());
@@ -247,6 +239,7 @@ public final class DiffAlgorithm {
                                 DiffNode newNode = new DiffNode(node.getType(), remain);
                                 newNode.setOpposite(new DiffNode(DiffNode.Type.VIRTUAL, 0));
                                 node.insertAfter(newNode);
+                                node.getOpposite().insertAfter(newNode.getOpposite());
                                 node.setLength(node.getLength() - remain);
                             }
                         }

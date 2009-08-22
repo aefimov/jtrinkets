@@ -89,9 +89,6 @@ public final class DiffAlgorithm {
         } else {
             DiffNode next = new DiffNode(type, length);
             next.setPrevious(previous);
-            if (previous != null) {
-                previous.setNext(next);
-            }
             return next;
         }
     }
@@ -138,68 +135,55 @@ public final class DiffAlgorithm {
             diff = nextNode(diff, DiffType.UNCHANGED, x.length - endX);
         }
 
-        // Join changed nodes
-        joinChanged(diff.getFirst().getLeft());
-
-        // Add virtual nodes
-        addVirtual(diff.getFirst().getLeft());
+        // Split nodes
+        diff = split(diff.getFirst());
 
         // Split opposite nodes with different length
-        splitChanged(diff.getFirst().getLeft(), x, y);
+        diff = splitChanged(diff.getFirst(), x, y);
 
-        return diff.getFirst().getLeft();
+        return diff.getFirst();
     }
 
-    private static void joinChanged(DiffNode node) {
+    private static DiffNode split(DiffNode node) {
+        DiffNode previous = node != null ? node.getFirst() : null;
         while (node != null) {
-            DiffNode next = node.getNext();
-            if (next != null &&
-                !node.hasOpposite() &&
-                !next.hasOpposite() &&
-                DiffType.isChanged(node.getType()) &&
-                DiffType.isChanged(next.getType())) {
-                next.setOpposite(node);
-                next.setPrevious(node.getPrevious());
-                node.setNext(next.getNext());
-                if (DiffType.ADDED.equals(node.getType())) {
-                    if (node.hasPrevious()) {
-                        node.getPrevious().setNext(next);
-                    }
-                    if (node.hasNext()) {
-                        node.getNext().setPrevious(next);
-                    }
+            if (DiffType.UNCHANGED.equals(node.getType())) {
+                // Simple split by clone
+                DiffNode opposite = new DiffNode(DiffType.UNCHANGED, node.getLength());
+                node.setOpposite(opposite);
+            } else if (DiffType.ADDED.equals(node.getType())) {
+                DiffNode next = node.getNext();
+                if (next != null && DiffType.REMOVED.equals(next.getType())) {
+                    node.remove();
+                    next.setOpposite(node);
+                } else {
+                    DiffNode virtual = new DiffNode(DiffType.VIRTUAL, 0);
+                    node.insertBefore(virtual);
+                    node.remove();
+                    virtual.setOpposite(node);
+                }
+            } else if (DiffType.REMOVED.equals(node.getType())) {
+                DiffNode next = node.getNext();
+                if (next != null && DiffType.ADDED.equals(next.getType())) {
+                    next.remove();
+                    node.setOpposite(next);
+                } else {
+                    DiffNode virtual = new DiffNode(DiffType.VIRTUAL, 0);
+                    node.setOpposite(virtual);
                 }
             }
             node = node.getNext();
         }
+        return previous != null ? previous.getFirst() : null;
     }
 
-    private static void addVirtual(DiffNode node) {
+    private static <T> DiffNode splitChanged(DiffNode node, T[] x, T[] y) {
+        DiffNode previous = node != null ? node.getFirst() : null;
         while (node != null) {
-            if (!node.hasOpposite() &&
-                DiffType.isChanged(node.getType())) {
-                DiffNode virtual = new DiffNode(DiffType.VIRTUAL, 0);
-                virtual.setOpposite(node);
-                virtual.setNext(node.getNext());
-                virtual.setPrevious(node.getPrevious());
-                if (DiffType.ADDED.equals(node.getType())) {
-                    if (node.hasPrevious()) {
-                        node.getPrevious().setNext(virtual);
-                    }
-                    if (node.hasNext()) {
-                        node.getNext().setPrevious(virtual);
-                    }
-                }
-            }
-            node = node.getNext();
-        }
-    }
-
-    private static <T> void splitChanged(DiffNode node, T[] x, T[] y) {
-        while (node != null) {
+            // If added items not equals to count of removed items
             if (node.hasOpposite() &&
-                DiffType.isChanged(node.getType()) &&
-                DiffType.isChanged(node.getOpposite().getType()) &&
+                DiffType.REMOVED.equals(node.getType()) &&
+                DiffType.ADDED.equals(node.getOpposite().getType()) &&
                 node.getLength() != node.getOpposite().getLength()) {
                 int minLength = Math.min(node.getLength(), node.getOpposite().getLength());
                 if (minLength > 0) {
@@ -222,7 +206,7 @@ public final class DiffAlgorithm {
                             null
                         );
 
-                        int unchanged = getUnchangedLength(node.getFirst().getLeft());
+                        int unchanged = getUnchangedLength(node.getFirst());
                         if (unchanged > maxUnchanged) {
                             maxUnchanged = unchanged;
                             maxUnchangedDiff = diff;
@@ -232,6 +216,7 @@ public final class DiffAlgorithm {
                     if (maxUnchangedDiff != null) {
                         // We found diff with minimal changes
                         if (node.getLength() < node.getOpposite().getLength()) {
+                            // Removed items is less that added items
                             // Insert virtual before
                             if (index > 0) {
                                 DiffNode newNode = new DiffNode(DiffType.VIRTUAL, 0);
@@ -265,15 +250,12 @@ public final class DiffAlgorithm {
                                 node.setLength(node.getLength() - remain);
                             }
                         }
-                        node.insertAfter(maxUnchangedDiff.getFirst().getLeft());
-
-                        node.remove();
-                        node.getOpposite().remove();
                     }
                 }
             }
             node = node.getNext();
         }
+        return previous != null ? previous.getFirst() : null;
     }
 
     private static int getUnchangedLength(DiffNode node) {
@@ -291,7 +273,7 @@ public final class DiffAlgorithm {
         DiffNode result = node;
         while (node != null) {
             node = node.splitByLength(length);
-            result = node.getFirst().getLeft();
+            result = node.getFirst();
             node = node.getNext();
         }
         return result;

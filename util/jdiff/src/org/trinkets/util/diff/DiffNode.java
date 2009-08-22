@@ -9,7 +9,7 @@ import java.util.List;
  * @author Alexey Efimov
  */
 public class DiffNode {
-    private DiffType type;
+    private Type type;
     private int length;
 
     /**
@@ -30,7 +30,7 @@ public class DiffNode {
     public DiffNode() {
     }
 
-    public DiffNode(DiffType type, int length) {
+    public DiffNode(Type type, int length) {
         setType(type);
         setLength(length);
     }
@@ -110,11 +110,11 @@ public class DiffNode {
     }
 
     public DiffNode splitByLength(int l) {
-        int oldLength = DiffType.VIRTUAL.equals(type) ? getOpposite().getLength() : length;
-        int newLength = DiffType.VIRTUAL.equals(type) ? 0 : l;
+        int oldLength = Type.VIRTUAL.equals(type) ? getOpposite().getLength() : length;
+        int newLength = Type.VIRTUAL.equals(type) ? 0 : l;
 
-        DiffType oppositeType = hasOpposite() ? opposite.getType() : null;
-        int oppositeLength = DiffType.VIRTUAL.equals(oppositeType) ? 0 : l;
+        Type oppositeType = hasOpposite() ? opposite.getType() : null;
+        int oppositeLength = Type.VIRTUAL.equals(oppositeType) ? 0 : l;
 
         for (int i = 0; i < oldLength / l; i++) {
             DiffNode newNode = new DiffNode(type, newLength);
@@ -130,11 +130,11 @@ public class DiffNode {
         return remove();
     }
 
-    public DiffType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(DiffType type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -193,5 +193,37 @@ public class DiffNode {
             current = current.getNext();
         }
         return nodes.toArray(new DiffNode[nodes.size()]);
+    }
+
+    /**
+     * Diff type.
+     *
+     * @author Alexey Efimov
+     */
+    public static enum Type {
+        /**
+         * This instruction type is for ranges in 'source' or 'target' array is not changed and
+         * can be copied from anywhere (source or target).
+         */
+        UNCHANGED,
+
+        /**
+         * This instruction type is for ranges added to 'target' array and can be copied only
+         * from 'target'.
+         */
+        ADDED,
+
+        /**
+         * This instruction type is for ranged removed from 'source' and can be copied only
+         * from 'source'.
+         */
+        REMOVED,
+
+        /**
+         * Fake instruction type to fill opposite arrays. For example if 'source' have {@link #REMOVED} instruction but
+         * have not corresponding {@link #ADDED} instruction in 'target', then target's array will modified by addition
+         * this instruction.
+         */
+        VIRTUAL
     }
 }

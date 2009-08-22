@@ -10,22 +10,22 @@ public abstract class StatisticsDiffMarker<T> implements DiffMarker<T> {
     public int removed;
     public int unchanged;
 
-    public final void apply(DiffType sourceType, T[] source, int sourceOffset, int sourceLength,
-                      DiffType targetType, T[] target, int targetOffset, int targetLength) {
+    public final void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
+                      DiffNode.Type targetType, T[] target, int targetOffset, int targetLength) {
         update(sourceType, sourceLength, targetType, targetLength);
         markup(sourceType, source, sourceOffset, sourceLength, targetType, target, targetOffset, targetLength);
     }
 
-    private void update(DiffType sourceType, int sourceLength, DiffType targetType, int targetLength) {
-        if (DiffType.ADDED.equals(targetType)) {
+    private void update(DiffNode.Type sourceType, int sourceLength, DiffNode.Type targetType, int targetLength) {
+        if (DiffNode.Type.ADDED.equals(targetType)) {
             added += targetLength;
         }
 
-        if (DiffType.REMOVED.equals(sourceType)) {
+        if (DiffNode.Type.REMOVED.equals(sourceType)) {
             removed += sourceLength;
         }
 
-        if (DiffType.UNCHANGED.equals(sourceType)) {
+        if (DiffNode.Type.UNCHANGED.equals(sourceType)) {
             unchanged += sourceLength;
         }
     }
@@ -38,6 +38,6 @@ public abstract class StatisticsDiffMarker<T> implements DiffMarker<T> {
         return removed > 0 ? (unchanged > 0 ? ((double) removed) / ((double) (removed + unchanged)) : 1) : 0;
     }
 
-    protected abstract void markup(DiffType sourceType, T[] source, int sourceOffset, int sourceLength,
-                                   DiffType targetType, T[] target, int targetOffset, int targetLength);
+    protected abstract void markup(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
+                                   DiffNode.Type targetType, T[] target, int targetOffset, int targetLength);
 }

@@ -1,11 +1,14 @@
 package org.trinkets.util.diff;
 
 /**
- * Diff marker.
+ * Diff marker. Marker is used to markup diff results.
+ * This is a converter from {@link org.trinkets.util.diff.DiffNode} structure to plain text or HTML.
  *
  * @author Alexey Efimov
+ * @see org.trinkets.util.diff.StringBuilderDiffMarker
+ * @see org.trinkets.util.diff.DiffMarkup
  */
 public interface DiffMarker<T> {
-    void apply(DiffType sourceType, T[] source, int sourceOffset, int sourceLength,
-               DiffType targetType, T[] target, int targetOffset, int targetLength);
+    void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
+               DiffNode.Type targetType, T[] target, int targetOffset, int targetLength);
 }

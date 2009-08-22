@@ -1,12 +1,12 @@
 package org.trinkets.util.diff;
 
 /**
- * Diff listener.
+ * Diff markup utility.
  *
  * @author Alexey Efimov
  */
-public final class Diff {
-    private Diff() {
+public final class DiffMarkup {
+    private DiffMarkup() {
     }
 
     public static <T> void compare(T[] source, T[] target, DiffMarker<T> marker) {
@@ -20,8 +20,8 @@ public final class Diff {
         int sourceOffset = 0;
         int targetOffset = 0;
         while (node != null) {
-            DiffType sourceType = node.getType();
-            DiffType targetType = node.hasOpposite() ? node.getOpposite().getType() : sourceType;
+            DiffNode.Type sourceType = node.getType();
+            DiffNode.Type targetType = node.hasOpposite() ? node.getOpposite().getType() : sourceType;
 
             int sourceLength = node.getLength();
             int targetLength = node.hasOpposite() ? node.getOpposite().getLength() : sourceLength;

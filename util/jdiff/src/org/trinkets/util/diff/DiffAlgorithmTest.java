@@ -31,4 +31,12 @@ public class DiffAlgorithmTest extends TestCase {
             "0 1 1 2 3 3 3 4 " +
             "0 1 2 2 3 3 3 4 ", builder.toString());
     }
+
+    public void testCompareChars() {
+        DiffNode[] nodes = DiffAlgorithm.compare(Strings.toArray("true"), Strings.toArray("false")).toArray();
+        assertEquals(3, nodes.length);
+        assertEquals("R:0,3->A:0,3", nodes[0].toString());
+        assertEquals("V:3,0->A:0,1", nodes[1].toString());
+        assertEquals("U:3,1->U:3,1", nodes[2].toString());
+    }
 }

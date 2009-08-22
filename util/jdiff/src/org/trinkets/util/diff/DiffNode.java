@@ -1,5 +1,8 @@
 package org.trinkets.util.diff;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Diff result structure.
  *
@@ -38,6 +41,9 @@ public class DiffNode {
 
     public void setPrevious(DiffNode previous) {
         this.previous = previous;
+        if (previous != null && previous.getNext() != this) {
+            previous.next = this;
+        }
     }
 
     public DiffNode getNext() {
@@ -46,6 +52,9 @@ public class DiffNode {
 
     public void setNext(DiffNode next) {
         this.next = next;
+        if (next != null && next.getPrevious() != this) {
+            next.previous = this;
+        }
     }
 
     public DiffNode getOpposite() {
@@ -55,8 +64,70 @@ public class DiffNode {
     public void setOpposite(DiffNode opposite) {
         this.opposite = opposite;
         if (opposite != null && opposite.getOpposite() != this) {
-            opposite.setOpposite(this);
+            opposite.opposite = this;
         }
+        if (hasPrevious() && previous.hasOpposite()) {
+            previous.getOpposite().setNext(opposite);
+        } else if (opposite != null) {
+            opposite.setPrevious(null);
+        }
+    }
+
+    public void insertBefore(DiffNode node) {
+        DiffNode last = node.getLast();
+
+        if (hasPrevious()) {
+            previous.setNext(node);
+        }
+        node.setPrevious(previous);
+        last.setNext(this);
+        setPrevious(last);
+    }
+
+    public void insertAfter(DiffNode node) {
+        DiffNode last = node.getLast();
+
+        if (hasNext()) {
+            next.setPrevious(last);
+        }
+        last.setNext(next);
+        node.setPrevious(this);
+        setNext(node);
+    }
+
+    public DiffNode remove() {
+        if (hasOpposite()) {
+            opposite.opposite = null;
+            opposite.remove();
+        }
+        if (hasPrevious()) {
+            previous.setNext(next);
+        }
+        if (hasNext()) {
+            next.setPrevious(previous);
+        }
+        return hasPrevious() ? previous : next;
+    }
+
+    public DiffNode splitByLength(int l) {
+        int oldLength = DiffType.VIRTUAL.equals(type) ? getOpposite().getLength() : length;
+        int newLength = DiffType.VIRTUAL.equals(type) ? 0 : l;
+
+        DiffType oppositeType = hasOpposite() ? opposite.getType() : null;
+        int oppositeLength = DiffType.VIRTUAL.equals(oppositeType) ? 0 : l;
+
+        for (int i = 0; i < oldLength / l; i++) {
+            DiffNode newNode = new DiffNode(type, newLength);
+            if (oppositeType != null) {
+                newNode.setOpposite(new DiffNode(oppositeType, oppositeLength));
+            }
+            insertBefore(newNode);
+            if (hasOpposite() && newNode.hasOpposite()) {
+                opposite.insertBefore(newNode.getOpposite());
+            }
+        }
+
+        return remove();
     }
 
     public DiffType getType() {
@@ -87,7 +158,6 @@ public class DiffNode {
         return opposite != null && opposite != this;
     }
 
-
     public DiffNode getFirst() {
         return hasPrevious() ? previous.getFirst() : this;
     }
@@ -100,112 +170,28 @@ public class DiffNode {
         return hasPrevious() ? previous.getOffset() + previous.getLength() : 0;
     }
 
-    public void insertBefore(DiffNode node) {
-        DiffNode last = node.getLast();
-
-        if (hasPrevious()) {
-            previous.setNext(node);
-        }
-        node.setPrevious(previous);
-        last.setNext(this);
-        setPrevious(last);
-
-        if (node.hasOpposite()) {
-            DiffNode oppositeNode = node.getOpposite();
-            DiffNode oppositeLast = oppositeNode.getLast();
-            if (hasOpposite()) {
-                if (opposite.hasPrevious()) {
-                    opposite.getPrevious().setNext(oppositeNode);
-                }
-                oppositeNode.setPrevious(opposite.getPrevious());
-                oppositeLast.setNext(opposite);
-                opposite.setPrevious(oppositeLast);
-            } else {
-                linkOpposite(node);
-            }
-        }
+    @Override
+    public String toString() {
+        return toStringWithoutOpposite() + (hasOpposite() ? "->" + opposite.toStringWithoutOpposite() : "");
     }
 
-    public void insertAfter(DiffNode node) {
-        DiffNode last = node.getLast();
-
-        if (hasNext()) {
-            next.setPrevious(last);
-        }
-        last.setNext(next);
-        node.setPrevious(this);
-        setNext(node);
-
-        if (node.hasOpposite()) {
-            DiffNode oppositeNode = node.getOpposite();
-            DiffNode oppositeLast = oppositeNode.getLast();
-            if (hasOpposite()) {
-                if (opposite.hasNext()) {
-                    opposite.getNext().setPrevious(oppositeLast);
-                }
-                oppositeLast.setNext(opposite.getNext());
-                oppositeNode.setPrevious(opposite);
-                opposite.setNext(oppositeNode);
-            } else {
-                linkOpposite(node);
-            }
-        }
+    private String toStringWithoutOpposite() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(type.name().charAt(0));
+        builder.append(":");
+        builder.append(getOffset());
+        builder.append(",");
+        builder.append(length);
+        return builder.toString();
     }
 
-    private void linkOpposite(DiffNode node) {
-        if (node.hasOpposite()) {
-            if (node.hasPrevious() && node.getPrevious().hasOpposite()) {
-                node.getOpposite().setPrevious(node.getPrevious().getOpposite());
-            } else {
-                node.getOpposite().setPrevious(node.getPrevious());
-            }
-            if (node.hasNext() && node.getNext().hasOpposite()) {
-                node.getOpposite().setNext(node.getNext().getOpposite());
-            } else {
-                node.getOpposite().setNext(node.getNext());
-            }
+    public DiffNode[] toArray() {
+        List<DiffNode> nodes = new ArrayList<DiffNode>();
+        DiffNode current = this;
+        while (current != null) {
+            nodes.add(current);
+            current = current.getNext();
         }
-    }
-
-    public DiffNode remove() {
-        if (hasOpposite()) {
-            opposite.setOpposite(null);
-            opposite.remove();
-        }
-        if (hasPrevious()) {
-            previous.setNext(next);
-        }
-        if (hasNext()) {
-            next.setPrevious(previous);
-        }
-        return hasPrevious() ? previous : next;
-    }
-
-    public DiffNode splitByLength(int l) {
-        int oldLength = DiffType.VIRTUAL.equals(type) ? getOpposite().getLength() : length;
-        int newLength = DiffType.VIRTUAL.equals(type) ? 0 : l;
-
-        DiffType oppositeType = hasOpposite() ? opposite.getType() : null;
-        int oppositeLength = DiffType.VIRTUAL.equals(oppositeType) ? 0 : l;
-
-        for (int i = 0; i < oldLength / l; i++) {
-            DiffNode newNode = new DiffNode(type, newLength);
-            if (oppositeType != null) {
-                newNode.setOpposite(new DiffNode(oppositeType, oppositeLength));
-            }
-            insertBefore(newNode);
-        }
-
-        return remove();
-    }
-
-    public DiffNode getLeft() {
-        if (hasOpposite()) {
-            if (DiffType.REMOVED.equals(getOpposite().getType()) ||
-                DiffType.ADDED.equals(type)) {
-                return opposite;
-            }
-        }
-        return this;
+        return nodes.toArray(new DiffNode[nodes.size()]);
     }
 }

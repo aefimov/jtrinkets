@@ -13,7 +13,7 @@ public final class Diff {
         DiffNode nodes = DiffAlgorithm.compare(source, target);
 
         // Markup diff results
-        markup(source, target, marker, nodes.getFirst().getLeft());
+        markup(source, target, marker, nodes.getFirst());
     }
 
     private static <T> void markup(T[] source, T[] target, DiffMarker<T> marker, DiffNode node) {
@@ -43,10 +43,10 @@ public final class Diff {
         String[] targetLines = Strings.lines(target);
 
         DiffNode diff = DiffAlgorithm.compare(sourceLines, targetLines);
-        diff = DiffAlgorithm.splitByLength(diff.getFirst().getLeft(), 1);
+        diff = DiffAlgorithm.splitByLength(diff.getFirst(), 1);
 
         // Markup diff results
-        markup(sourceLines, targetLines, marker, diff.getFirst().getLeft());
+        markup(sourceLines, targetLines, marker, diff.getFirst());
     }
 
     public static void compareWords(String source, String target, DiffMarker<String> marker) {

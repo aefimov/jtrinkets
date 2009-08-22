@@ -8,6 +8,11 @@ package org.trinkets.util.diff;
 public abstract class StringBuilderDiffMarker<T> implements DiffMarker<T> {
     protected final StringBuilder sourceResult = new StringBuilder();
     protected final StringBuilder targetResult = new StringBuilder();
+    protected final StringBuilderDiffMarkupDecorator decorator;
+
+    protected StringBuilderDiffMarker(StringBuilderDiffMarkupDecorator decorator) {
+        this.decorator = decorator;
+    }
 
     public String getSourceResult() {
         return sourceResult.toString();
@@ -39,8 +44,14 @@ public abstract class StringBuilderDiffMarker<T> implements DiffMarker<T> {
     protected abstract CharSequence toCharSequence(T[] array, int offset, int length);
 
     protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+        if (decorator != null) {
+            decorator.beforeMarkupText(sourceType, sourceResult, targetType, targetResult);
+        }
     }
 
     protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+        if (decorator != null) {
+            decorator.afterMarkupText(sourceType, sourceResult, targetType, targetResult);
+        }
     }
 }

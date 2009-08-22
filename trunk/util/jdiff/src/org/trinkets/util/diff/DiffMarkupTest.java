@@ -8,95 +8,16 @@ import junit.framework.TestCase;
  * @author Alexey Efimov
  */
 public class DiffMarkupTest extends TestCase {
-    private static void appendMarkers(DiffNode.Type sourceType, StringBuilder sourceResult, DiffNode.Type targetType, StringBuilder targetResult) {
-        if (targetType.equals(DiffNode.Type.ADDED)) {
-            targetResult.append("+");
-        }
-        if (sourceType.equals(DiffNode.Type.REMOVED)) {
-            sourceResult.append("-");
-        }
-    }
-
     private static StringBuilderDiffMarker<Character> createCharacterMarker() {
-        return new CharacterDiffMarker() {
-            @Override
-            protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                appendMarkers(sourceType, sourceResult, targetType, targetResult);
-            }
-
-            @Override
-            protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                appendMarkers(sourceType, sourceResult, targetType, targetResult);
-            }
-        };
+        return new CharacterDiffMarker(new PlainTextDiffMarkupDecorator());
     }
 
     private static StringBuilderDiffMarker<String> createStringMarker() {
-        return new StringDiffMarker() {
-            @Override
-            protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                appendMarkers(sourceType, sourceResult, targetType, targetResult);
-            }
-
-            @Override
-            protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                appendMarkers(sourceType, sourceResult, targetType, targetResult);
-            }
-        };
-    }
-
-    private static void appendSubMarkers(StringBuilder sourceResult, StringBuilder targetResult) {
-        targetResult.append("*");
-        sourceResult.append("*");
+        return new StringDiffMarker(new PlainTextDiffMarkupDecorator());
     }
 
     private static StringBuilderDiffMarker<String> createIncrementalMarker() {
-        return
-            new IncrementalLinesDiffMarker(
-                new IncrementalWordsDiffMarker(
-                    createCharacterMarker(),
-                    0.5) {
-                    @Override
-                    protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                        appendMarkers(sourceType, sourceResult, targetType, targetResult);
-                    }
-
-                    @Override
-                    protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                        appendMarkers(sourceType, sourceResult, targetType, targetResult);
-                    }
-
-                    @Override
-                    protected void beforeSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                        appendSubMarkers(sourceResult, targetResult);
-                    }
-
-                    @Override
-                    protected void afterSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                        appendSubMarkers(sourceResult, targetResult);
-                    }
-                },
-                0.5) {
-                @Override
-                protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                    appendMarkers(sourceType, sourceResult, targetType, targetResult);
-                }
-
-                @Override
-                protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                    appendMarkers(sourceType, sourceResult, targetType, targetResult);
-                }
-
-                @Override
-                protected void beforeSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                    appendSubMarkers(sourceResult, targetResult);
-                }
-
-                @Override
-                protected void afterSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
-                    appendSubMarkers(sourceResult, targetResult);
-                }
-            };
+        return new IncrementalLinesDiffMarker(new IncrementalWordsDiffMarker(createCharacterMarker()));
     }
 
     public void testCompareCharacters() {

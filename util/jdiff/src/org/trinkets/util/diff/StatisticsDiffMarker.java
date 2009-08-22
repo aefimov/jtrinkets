@@ -5,15 +5,32 @@ package org.trinkets.util.diff;
  *
  * @author Alexey Efimov
  */
-public abstract class StatisticsDiffMarker<T> implements DiffMarker<T> {
-    public int added;
-    public int removed;
-    public int unchanged;
+public class StatisticsDiffMarker<T> implements DiffMarker<T> {
+    protected final DiffMarker<T> delegate;
 
-    public final void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
+    private int added = 0;
+    private int removed = 0;
+    private int unchanged = 0;
+
+    protected StatisticsDiffMarker(DiffMarker<T> delegate) {
+        this.delegate = delegate;
+    }
+
+    public void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
                       DiffNode.Type targetType, T[] target, int targetOffset, int targetLength) {
         update(sourceType, sourceLength, targetType, targetLength);
-        markup(sourceType, source, sourceOffset, sourceLength, targetType, target, targetOffset, targetLength);
+        if (delegate != null) {
+            delegate.apply(sourceType, source, sourceOffset, sourceLength, targetType, target, targetOffset, targetLength);
+        }
+    }
+
+    public void reset() {
+        added = 0;
+        removed = 0;
+        unchanged = 0;
+        if (delegate != null) {
+            delegate.reset();
+        }
     }
 
     private void update(DiffNode.Type sourceType, int sourceLength, DiffNode.Type targetType, int targetLength) {
@@ -37,7 +54,4 @@ public abstract class StatisticsDiffMarker<T> implements DiffMarker<T> {
     public double getRemovePercent() {
         return removed > 0 ? (unchanged > 0 ? ((double) removed) / ((double) (removed + unchanged)) : 1) : 0;
     }
-
-    protected abstract void markup(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
-                                   DiffNode.Type targetType, T[] target, int targetOffset, int targetLength);
 }

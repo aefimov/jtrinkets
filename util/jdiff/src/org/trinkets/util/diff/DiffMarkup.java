@@ -10,10 +10,10 @@ public final class DiffMarkup {
     }
 
     public static <T> void compare(T[] source, T[] target, DiffMarker<T> marker) {
-        DiffNode nodes = DiffAlgorithm.compare(source, target);
+        DiffNode diff = DiffAlgorithm.compare(source, target);
 
         // Markup diff results
-        markup(source, target, marker, nodes.getFirst());
+        markup(source, target, marker, diff.getFirst());
     }
 
     private static <T> void markup(T[] source, T[] target, DiffMarker<T> marker, DiffNode node) {
@@ -43,6 +43,9 @@ public final class DiffMarkup {
         String[] targetLines = Strings.lines(target);
 
         DiffNode diff = DiffAlgorithm.compare(sourceLines, targetLines);
+        // Split opposite nodes with different length
+        diff = DiffAlgorithm.splitChanged(diff.getFirst(), sourceLines, targetLines, new IncrementalLinesDiffHandler());
+        // Split by one line per change
         diff = DiffAlgorithm.splitByLength(diff.getFirst(), 1);
 
         // Markup diff results
@@ -55,5 +58,14 @@ public final class DiffMarkup {
 
     public static void compareChars(String source, String target, DiffMarker<Character> marker) {
         compare(Strings.toArray(source), Strings.toArray(target), marker);
+    }
+
+    private static class IncrementalLinesDiffHandler implements IncrementalDiffHandler<String> {
+        public DiffNode diff(String[] x, int xOffset, int xLength, String[] y, int yOffset, int yLength) {
+            CharSequence xChars = Strings.toCharSequence(x, xOffset, xLength);
+            CharSequence yChars = Strings.toCharSequence(y, yOffset, yLength);
+
+            return DiffAlgorithm.compare(Strings.words(xChars.toString()), Strings.words(yChars.toString()));
+        }
     }
 }

@@ -11,4 +11,5 @@ package org.trinkets.util.diff;
 public interface DiffMarker<T> {
     void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
                DiffNode.Type targetType, T[] target, int targetOffset, int targetLength);
+    void reset();
 }

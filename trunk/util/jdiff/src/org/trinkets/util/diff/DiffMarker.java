@@ -9,7 +9,7 @@ package org.trinkets.util.diff;
  * @see org.trinkets.util.diff.DiffMarkup
  */
 public interface DiffMarker<T> {
-    void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
-               DiffNode.Type targetType, T[] target, int targetOffset, int targetLength);
+    void apply(DiffNode sourceNode, T[] source, int sourceOffset, int sourceLength,
+               DiffNode targetNode, T[] target, int targetOffset, int targetLength);
     void reset();
 }

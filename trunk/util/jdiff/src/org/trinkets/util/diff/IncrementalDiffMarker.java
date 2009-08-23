@@ -22,32 +22,32 @@ public abstract class IncrementalDiffMarker<T> extends StringDiffMarker {
     }
 
     @Override
-    protected void apply(DiffNode.Type sourceType, CharSequence source, DiffNode.Type targetType, CharSequence target) {
-        if (DiffNode.Type.REMOVED.equals(sourceType) && targetType.equals(DiffNode.Type.ADDED)) {
+    protected void apply(DiffNode sourceNode, CharSequence source, DiffNode targetNode, CharSequence target) {
+        if (DiffNode.Type.REMOVED.equals(sourceNode.getType()) && DiffNode.Type.ADDED.equals(targetNode.getType())) {
             statsMarker.reset();
             subCompare(source, target, statsMarker);
             if (statsMarker.getAddedPercent() < threshold && statsMarker.getRemovePercent() < threshold) {
-                beforeSubMarkupText(sourceType, targetType);
+                beforeSubMarkupText(sourceNode, targetNode);
                 sourceResult.append(subMarker.getSourceResult());
                 targetResult.append(subMarker.getTargetResult());
-                afterSubMarkupText(sourceType, targetType);
+                afterSubMarkupText(sourceNode, targetNode);
             } else {
-                super.apply(sourceType, source, targetType, target);
+                super.apply(sourceNode, source, targetNode, target);
             }
         } else {
-            super.apply(sourceType, source, targetType, target);
+            super.apply(sourceNode, source, targetNode, target);
         }
     }
 
-    protected void beforeSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+    protected void beforeSubMarkupText(DiffNode sourceNode, DiffNode targetNode) {
         if (decorator != null) {
-            decorator.beforeSubMarkupText(sourceType, sourceResult, targetType, targetResult);
+            decorator.beforeSubMarkupText(sourceNode, sourceResult, targetNode, targetResult);
         }
     }
 
-    protected void afterSubMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+    protected void afterSubMarkupText(DiffNode sourceNode, DiffNode targetNode) {
         if (decorator != null) {
-            decorator.afterSubMarkupText(sourceType, sourceResult, targetType, targetResult);
+            decorator.afterSubMarkupText(sourceNode, sourceResult, targetNode, targetResult);
         }
     }
 

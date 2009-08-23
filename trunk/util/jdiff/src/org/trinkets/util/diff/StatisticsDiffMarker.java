@@ -16,11 +16,11 @@ public class StatisticsDiffMarker<T> implements DiffMarker<T> {
         this.delegate = delegate;
     }
 
-    public void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
-                      DiffNode.Type targetType, T[] target, int targetOffset, int targetLength) {
-        update(sourceType, sourceLength, targetType, targetLength);
+    public void apply(DiffNode sourceNode, T[] source, int sourceOffset, int sourceLength,
+                      DiffNode targetNode, T[] target, int targetOffset, int targetLength) {
+        update(sourceNode.getType(), sourceLength, targetNode.getType(), targetLength);
         if (delegate != null) {
-            delegate.apply(sourceType, source, sourceOffset, sourceLength, targetType, target, targetOffset, targetLength);
+            delegate.apply(sourceNode, source, sourceOffset, sourceLength, targetNode, target, targetOffset, targetLength);
         }
     }
 

@@ -6,33 +6,29 @@ package org.trinkets.util.diff;
  * @author Alexey Efimov
  */
 public class PlainTextDiffMarkupDecorator implements StringBuilderDiffMarkupDecorator {
-    private static void appendMarkers(DiffNode.Type sourceType, StringBuilder sourceResult, DiffNode.Type targetType, StringBuilder targetResult) {
-        if (targetType.equals(DiffNode.Type.ADDED)) {
+    public void beforeMarkupText(DiffNode sourceNode, StringBuilder sourceResult, DiffNode targetNode, StringBuilder targetResult) {
+        if (DiffNode.Type.ADDED.equals(targetNode.getType())) {
             targetResult.append("+");
         }
-        if (sourceType.equals(DiffNode.Type.REMOVED)) {
+        if (DiffNode.Type.REMOVED.equals(sourceNode.getType())) {
             sourceResult.append("-");
         }
     }
 
-    private static void appendSubMarkers(StringBuilder sourceResult, StringBuilder targetResult) {
+    public void afterMarkupText(DiffNode sourceNode, StringBuilder sourceResult, DiffNode targetNode, StringBuilder targetResult) {
+        beforeMarkupText(sourceNode, sourceResult, targetNode, targetResult);
+    }
+
+    public void beforeSubMarkupText(DiffNode sourceNode, StringBuilder sourceResult, DiffNode targetNode, StringBuilder targetResult) {
         targetResult.append("*");
         sourceResult.append("*");
     }
 
-    public void beforeMarkupText(DiffNode.Type sourceType, StringBuilder sourceResult, DiffNode.Type targetType, StringBuilder targetResult) {
-        appendMarkers(sourceType, sourceResult, targetType, targetResult);
+    public void afterSubMarkupText(DiffNode sourceNode, StringBuilder sourceResult, DiffNode targetNode, StringBuilder targetResult) {
+        beforeSubMarkupText(sourceNode, sourceResult, targetNode, targetResult);
     }
 
-    public void afterMarkupText(DiffNode.Type sourceType, StringBuilder sourceResult, DiffNode.Type targetType, StringBuilder targetResult) {
-        appendMarkers(sourceType, sourceResult, targetType, targetResult);
-    }
-
-    public void beforeSubMarkupText(DiffNode.Type sourceType, StringBuilder sourceResult, DiffNode.Type targetType, StringBuilder targetResult) {
-        appendSubMarkers(sourceResult, targetResult);
-    }
-
-    public void afterSubMarkupText(DiffNode.Type sourceType, StringBuilder sourceResult, DiffNode.Type targetType, StringBuilder targetResult) {
-        appendSubMarkers(sourceResult, targetResult);
+    public CharSequence escape(CharSequence chars) {
+        return chars;
     }
 }

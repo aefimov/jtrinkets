@@ -22,11 +22,18 @@ public abstract class StringBuilderDiffMarker<T> implements DiffMarker<T> {
         return targetResult.toString();
     }
 
-    public final void apply(DiffNode.Type sourceType, T[] source, int sourceOffset, int sourceLength,
-                            DiffNode.Type targetType, T[] target, int targetOffset, int targetLength) {
+    public final void apply(DiffNode sourceNode, T[] source, int sourceOffset, int sourceLength,
+                            DiffNode targetNode, T[] target, int targetOffset, int targetLength) {
         apply(
-            sourceType, toCharSequence(source, sourceOffset, sourceLength),
-            targetType, toCharSequence(target, targetOffset, targetLength));
+            sourceNode, escape(toCharSequence(source, sourceOffset, sourceLength)),
+            targetNode, escape(toCharSequence(target, targetOffset, targetLength)));
+    }
+
+    protected CharSequence escape(CharSequence chars) {
+        if (decorator != null) {
+            return decorator.escape(chars);
+        }
+        return chars;
     }
 
     public void reset() {
@@ -34,24 +41,24 @@ public abstract class StringBuilderDiffMarker<T> implements DiffMarker<T> {
         targetResult.setLength(0);
     }
 
-    protected void apply(DiffNode.Type sourceType, CharSequence source, DiffNode.Type targetType, CharSequence target) {
-        beforeMarkupText(sourceType, targetType);
+    protected void apply(DiffNode sourceNode, CharSequence source, DiffNode targetNode, CharSequence target) {
+        beforeMarkupText(sourceNode, targetNode);
         sourceResult.append(source);
         targetResult.append(target);
-        afterMarkupText(sourceType, targetType);
+        afterMarkupText(sourceNode, targetNode);
     }
 
     protected abstract CharSequence toCharSequence(T[] array, int offset, int length);
 
-    protected void beforeMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+    protected void beforeMarkupText(DiffNode sourceNode, DiffNode targetNode) {
         if (decorator != null) {
-            decorator.beforeMarkupText(sourceType, sourceResult, targetType, targetResult);
+            decorator.beforeMarkupText(sourceNode, sourceResult, targetNode, targetResult);
         }
     }
 
-    protected void afterMarkupText(DiffNode.Type sourceType, DiffNode.Type targetType) {
+    protected void afterMarkupText(DiffNode sourceNode, DiffNode targetNode) {
         if (decorator != null) {
-            decorator.afterMarkupText(sourceType, sourceResult, targetType, targetResult);
+            decorator.afterMarkupText(sourceNode, sourceResult, targetNode, targetResult);
         }
     }
 }

@@ -20,15 +20,12 @@ public final class DiffMarkup {
         int sourceOffset = 0;
         int targetOffset = 0;
         while (node != null) {
-            DiffNode.Type sourceType = node.getType();
-            DiffNode.Type targetType = node.hasOpposite() ? node.getOpposite().getType() : sourceType;
-
             int sourceLength = node.getLength();
             int targetLength = node.hasOpposite() ? node.getOpposite().getLength() : sourceLength;
 
             marker.apply(
-                sourceType, source, sourceOffset, sourceLength,
-                targetType, target, targetOffset, targetLength
+                node, source, sourceOffset, sourceLength,
+                node.hasOpposite() ? node.getOpposite() : node, target, targetOffset, targetLength
             );
 
             sourceOffset += sourceLength;

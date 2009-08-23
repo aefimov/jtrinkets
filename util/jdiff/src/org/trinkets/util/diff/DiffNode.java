@@ -224,6 +224,10 @@ public class DiffNode {
          * have not corresponding {@link #ADDED} instruction in 'target', then target's array will modified by addition
          * this instruction.
          */
-        VIRTUAL
+        VIRTUAL;
+
+        public boolean isChanged() {
+            return equals(ADDED) || equals(REMOVED);
+        }
     }
 }

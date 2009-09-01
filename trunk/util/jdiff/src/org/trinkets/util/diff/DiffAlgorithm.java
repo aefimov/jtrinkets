@@ -19,26 +19,35 @@ public final class DiffAlgorithm {
      *
      * @param x    X list
      * @param y    Y list
-     * @param c    LCS matrix
-     * @param i    LCS matrix index i
-     * @param j    LCS matrix index j
      * @param diff Start {@link org.trinkets.util.diff.DiffNode}.
      * @return End {@link org.trinkets.util.diff.DiffNode}.
      */
-    private static <T> DiffNode backtrack(ArrayRange<T> x, ArrayRange<T> y, int[][] c, int i, int j, DiffNode diff) {
-        if (i > 0 && j > 0 && equals(x.get(i - 1), y.get(j - 1))) {
-            diff = backtrack(x, y, c, i - 1, j - 1, diff);
-            return nextNode(diff, DiffNode.Type.UNCHANGED, 1);
-        } else {
-            if (j > 0 && (i == 0 || c[i][j - 1] >= c[i - 1][j])) {
-                diff = backtrack(x, y, c, i, j - 1, diff);
-                return nextNode(diff, DiffNode.Type.ADDED, 1);
-            } else if (i > 0 && (j == 0 || c[i][j - 1] < c[i - 1][j])) {
-                diff = backtrack(x, y, c, i - 1, j, diff);
-                return nextNode(diff, DiffNode.Type.REMOVED, 1);
+    private static <T> DiffNode backtrack(ArrayRange<T> x, ArrayRange<T> y, DiffNode diff) {
+        int[][] lcs = lcs(x, y);
+
+        DiffNode previous = diff;
+        diff = null;
+        // From back to begin
+        int i = x.length(), j = y.length();
+
+        while (i > 0 || j > 0) {
+            if (i > 0 && j > 0 && equals(x.get(i - 1), y.get(j - 1))) {
+                diff = createNode(diff, DiffNode.Type.UNCHANGED, 1, false);
+                i--;
+                j--;
+            } else if (j > 0 && (i == 0 || lcs[i][j - 1] >= lcs[i - 1][j])) {
+                diff = createNode(diff, DiffNode.Type.ADDED, 1, false);
+                j--;
+            } else if (i > 0 && (j == 0 || lcs[i][j - 1] < lcs[i - 1][j])) {
+                diff = createNode(diff, DiffNode.Type.REMOVED, 1, false);
+                i--;
             }
         }
-        return diff;
+        // Now append into current node
+        if (previous != null && diff != null) {
+            previous.getLast().insertAfter(diff.getFirst());
+        }
+        return previous != null ? previous.getFirst() : (diff != null ? diff.getFirst() : null);
     }
 
     /**
@@ -52,18 +61,18 @@ public final class DiffAlgorithm {
      */
     static <T> int[][] lcs(ArrayRange<T> x, ArrayRange<T> y) {
         // Create matrix
-        int[][] c = new int[x.length() + 1][y.length() + 1];
-        // Fill matrix 
-        for (int i = 1; i < c.length; i++) {
-            for (int j = 1; j < c[i].length; j++) {
+        int[][] lcs = new int[x.length() + 1][y.length() + 1];
+        // Fill matrix
+        for (int i = 1; i < lcs.length; i++) {
+            for (int j = 1; j < lcs[i].length; j++) {
                 if (equals(x.get(i - 1), y.get(j - 1))) {
-                    c[i][j] = c[i - 1][j - 1] + 1;
+                    lcs[i][j] = lcs[i - 1][j - 1] + 1;
                 } else {
-                    c[i][j] = Math.max(c[i][j - 1], c[i - 1][j]);
+                    lcs[i][j] = Math.max(lcs[i][j - 1], lcs[i - 1][j]);
                 }
             }
         }
-        return c;
+        return lcs;
     }
 
     private static <T> boolean equals(T t1, T t2) {
@@ -75,21 +84,26 @@ public final class DiffAlgorithm {
      * previous {@link DiffNode} was appended with the same
      * {@link org.trinkets.util.diff.DiffNode.Type} as this one, then token was appended into previous list.
      *
-     * @param previous Previous node
-     * @param type     Diff type
-     * @param length   Marker length
+     * @param current Current node
+     * @param type    Diff type
+     * @param length  Marker length
+     * @param after   If {@code true} and new node will created, then it will be placed after previous.
      * @return Next node
      */
-    private static DiffNode nextNode(DiffNode previous, DiffNode.Type type, int length) {
+    private static DiffNode createNode(DiffNode current, DiffNode.Type type, int length, boolean after) {
         // Check previous type
-        if (previous != null && type.equals(previous.getType())) {
+        if (current != null && type.equals(current.getType())) {
             // Append to previous with same type
-            previous.setLength(previous.getLength() + 1);
-            return previous;
+            current.setLength(current.getLength() + 1);
+            return current;
         } else {
-            DiffNode next = new DiffNode(type, length);
-            next.setPrevious(previous);
-            return next;
+            DiffNode created = new DiffNode(type, length);
+            if (after) {
+                created.setPrevious(current);
+            } else if (current != null) {
+                current.insertBefore(created);
+            }
+            return created;
         }
     }
 
@@ -123,16 +137,14 @@ public final class DiffAlgorithm {
         DiffNode diff = null;
         if (startX > 0) {
             // Begin not changed
-            diff = nextNode(diff, DiffNode.Type.UNCHANGED, startX);
+            diff = createNode(diff, DiffNode.Type.UNCHANGED, startX, true);
         }
 
-        // Compute matrix of LCS (see http://en.wikipedia.org/wiki/Longest_common_subsequence_problem)
-        int[][] c = lcs(xRange, yRange);
-        diff = backtrack(xRange, yRange, c, xRange.length(), yRange.length(), diff);
+        diff = backtrack(xRange, yRange, diff);
 
         if (endX < x.length) {
             // Ending not changed
-            diff = nextNode(diff, DiffNode.Type.UNCHANGED, x.length - endX);
+            diff = createNode(diff != null ? diff.getLast() : null, DiffNode.Type.UNCHANGED, x.length - endX, true);
         }
 
         // Split nodes
@@ -151,18 +163,20 @@ public final class DiffAlgorithm {
             } else if (DiffNode.Type.ADDED.equals(node.getType())) {
                 DiffNode next = node.getNext();
                 if (next != null && DiffNode.Type.REMOVED.equals(next.getType())) {
-                    node.remove();
+                    previous = node.remove();
                     next.setOpposite(node);
+                    node = previous;
                 } else {
                     DiffNode virtual = new DiffNode(DiffNode.Type.VIRTUAL, 0);
                     node.insertBefore(virtual);
-                    node.remove();
+                    previous = node.remove();
                     virtual.setOpposite(node);
+                    node = previous;
                 }
             } else if (DiffNode.Type.REMOVED.equals(node.getType())) {
                 DiffNode next = node.getNext();
                 if (next != null && DiffNode.Type.ADDED.equals(next.getType())) {
-                    next.remove();
+                    previous = next.remove();
                     node.setOpposite(next);
                 } else {
                     DiffNode virtual = new DiffNode(DiffNode.Type.VIRTUAL, 0);

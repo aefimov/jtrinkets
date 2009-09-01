@@ -143,4 +143,39 @@ public class DiffMarkupTest extends TestCase {
             "*\t<option name=\"Make\" -enabled-=\"true\" />\n*\tafter\n", marker.getSourceResult());
         assertEquals("\tbefore\n*\t<option name=\"Make\" +value+=\"true\" />\n*\tafter\n", marker.getTargetResult());
     }
+
+    public void testTwoCharsToFourChars() {
+        StringBuilderDiffMarker<Character> marker = createCharacterMarker();
+        DiffMarkup.compareChars("io", "util", marker);
+
+        assertEquals("i-o-", marker.getSourceResult());
+        assertEquals("+ut+i+l+", marker.getTargetResult());
+    }
+
+    public void testTwoLinesToFourLines() {
+        StringBuilderDiffMarker<String> marker = createIncrementalMarker();
+        DiffMarkup.compareLines(
+            "\n" +
+                "import java.io.OutputStream;\n" +
+                "import java.util.*;\n\n",
+            "\n" +
+                "import java.util.Collections;\n" +
+                "import java.util.List;\n" +
+                "import java.util.Map;\n" +
+                "import java.util.ArrayList;\n\n",
+            marker);
+
+        assertEquals(
+            "\n" +
+                "*import java.-io-.-OutputStream-;\n*" +
+                "*import java.util.-*-;\n*" +
+                "\n", marker.getSourceResult());
+        assertEquals(
+            "\n" +
+                "*import java.+util+.+Collections+;\n*" +
+                "*import java.util.+List+;\n*" +
+                "+import java.util.Map;\n+" +
+                "+import java.util.ArrayList;\n+" +
+                "\n", marker.getTargetResult());
+    }
 }

@@ -106,7 +106,10 @@ public class DiffNode {
         if (hasNext()) {
             next.setPrevious(previous);
         }
-        return hasPrevious() ? previous : next;
+        DiffNode placeholder = hasPrevious() ? previous : this.next;
+        this.previous = null;
+        this.next = null;
+        return placeholder;
     }
 
     public DiffNode splitByLength(int l) {

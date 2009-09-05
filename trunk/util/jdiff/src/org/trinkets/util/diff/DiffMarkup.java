@@ -10,7 +10,7 @@ public final class DiffMarkup {
     }
 
     public static <T> void compare(T[] source, T[] target, DiffMarker<T> marker) {
-        DiffNode diff = DiffAlgorithm.compare(source, target);
+        DiffNode diff = DiffAlgorithm.compare(source, target, false);
 
         // Markup diff results
         markup(source, target, marker, diff.getFirst());
@@ -39,7 +39,7 @@ public final class DiffMarkup {
         String[] sourceLines = Strings.lines(source);
         String[] targetLines = Strings.lines(target);
 
-        DiffNode diff = DiffAlgorithm.compare(sourceLines, targetLines);
+        DiffNode diff = DiffAlgorithm.compare(sourceLines, targetLines, true);
         // Split opposite nodes with different length
         diff = DiffAlgorithm.splitChanged(diff.getFirst(), sourceLines, targetLines, new IncrementalLinesDiffHandler());
         // Split by one line per change
@@ -62,7 +62,7 @@ public final class DiffMarkup {
             CharSequence xChars = Strings.toCharSequence(x, xOffset, xLength);
             CharSequence yChars = Strings.toCharSequence(y, yOffset, yLength);
 
-            return DiffAlgorithm.compare(Strings.words(xChars.toString()), Strings.words(yChars.toString()));
+            return DiffAlgorithm.compare(Strings.words(xChars.toString()), Strings.words(yChars.toString()), false);
         }
     }
 }

@@ -19,35 +19,28 @@ public final class DiffAlgorithm {
      *
      * @param x    X list
      * @param y    Y list
-     * @param diff Start {@link org.trinkets.util.diff.DiffNode}.
-     * @return End {@link org.trinkets.util.diff.DiffNode}.
+     * @return Backtrack in {@link org.trinkets.util.diff.DiffNode}.
      */
-    private static <T> DiffNode backtrack(ArrayRange<T> x, ArrayRange<T> y, DiffNode diff) {
+    private static <T> DiffNode backtrack(T[] x, T[] y) {
+        DiffNode backtrack = null;
         int[][] lcs = lcs(x, y);
-
-        DiffNode previous = diff;
-        diff = null;
         // From back to begin
-        int i = x.length(), j = y.length();
+        int i = x.length, j = y.length;
 
         while (i > 0 || j > 0) {
-            if (i > 0 && j > 0 && equals(x.get(i - 1), y.get(j - 1))) {
-                diff = createNode(diff, DiffNode.Type.UNCHANGED, 1, false);
+            if (i > 0 && j > 0 && equals(x[i - 1], y[j - 1])) {
+                backtrack = createNode(backtrack, DiffNode.Type.UNCHANGED, 1);
                 i--;
                 j--;
             } else if (j > 0 && (i == 0 || lcs[i][j - 1] >= lcs[i - 1][j])) {
-                diff = createNode(diff, DiffNode.Type.ADDED, 1, false);
+                backtrack = createNode(backtrack, DiffNode.Type.ADDED, 1);
                 j--;
             } else if (i > 0 && (j == 0 || lcs[i][j - 1] < lcs[i - 1][j])) {
-                diff = createNode(diff, DiffNode.Type.REMOVED, 1, false);
+                backtrack = createNode(backtrack, DiffNode.Type.REMOVED, 1);
                 i--;
             }
         }
-        // Now append into current node
-        if (previous != null && diff != null) {
-            previous.getLast().insertAfter(diff.getFirst());
-        }
-        return previous != null ? previous.getFirst() : (diff != null ? diff.getFirst() : null);
+        return backtrack != null ? backtrack.reverse() : null;
     }
 
     /**
@@ -59,13 +52,13 @@ public final class DiffAlgorithm {
      * @param y Y list
      * @return LCS matrix
      */
-    static <T> int[][] lcs(ArrayRange<T> x, ArrayRange<T> y) {
+    static <T> int[][] lcs(T[] x, T[] y) {
         // Create matrix
-        int[][] lcs = new int[x.length() + 1][y.length() + 1];
+        int[][] lcs = new int[x.length + 1][y.length + 1];
         // Fill matrix
         for (int i = 1; i < lcs.length; i++) {
             for (int j = 1; j < lcs[i].length; j++) {
-                if (equals(x.get(i - 1), y.get(j - 1))) {
+                if (equals(x[i - 1], y[j - 1])) {
                     lcs[i][j] = lcs[i - 1][j - 1] + 1;
                 } else {
                     lcs[i][j] = Math.max(lcs[i][j - 1], lcs[i - 1][j]);
@@ -87,10 +80,9 @@ public final class DiffAlgorithm {
      * @param current Current node
      * @param type    Diff type
      * @param length  Marker length
-     * @param after   If {@code true} and new node will created, then it will be placed after previous.
      * @return Next node
      */
-    private static DiffNode createNode(DiffNode current, DiffNode.Type type, int length, boolean after) {
+    private static DiffNode createNode(DiffNode current, DiffNode.Type type, int length) {
         // Check previous type
         if (current != null && type.equals(current.getType())) {
             // Append to previous with same type
@@ -98,11 +90,7 @@ public final class DiffAlgorithm {
             return current;
         } else {
             DiffNode created = new DiffNode(type, length);
-            if (after) {
-                created.setPrevious(current);
-            } else if (current != null) {
-                current.insertBefore(created);
-            }
+            created.setPrevious(current);
             return created;
         }
     }
@@ -115,37 +103,12 @@ public final class DiffAlgorithm {
      * @return list of {@link DiffNode}
      */
     public static <T> DiffNode compare(T[] x, T[] y) {
-        int startX = 0;
-        int startY = 0;
-        // Skip equal objects at start
-        while (startX < x.length && startY < y.length && equals(y[startY], x[startX])) {
-            startX++;
-            startY++;
-        }
-        int endX = x.length;
-        int endY = y.length;
-        // Skip equal objects at end
-        while (endX > startX && endY > startY && equals(x[endX - 1], y[endY - 1])) {
-            endX--;
-            endY--;
-        }
-        // Now we have sequence 0..startX..endX..x.length() and
-        //                      0..startY..endY..y.length()
-        ArrayRange<T> xRange = new ArrayRange<T>(x, startX, endX - startX);
-        ArrayRange<T> yRange = new ArrayRange<T>(y, startY, endY - startY);
-        // To build C matrix we must use only x[startX..endX] comparing to y[startY..endY]
-        DiffNode diff = null;
-        if (startX > 0) {
-            // Begin not changed
-            diff = createNode(diff, DiffNode.Type.UNCHANGED, startX, true);
-        }
+        // Here was optimisation to skip equals symbols at begin and at end of arrays,
+        // but it was removed because it doing wrong comparison to indenting code
+        // for example
 
-        diff = backtrack(xRange, yRange, diff);
-
-        if (endX < x.length) {
-            // Ending not changed
-            diff = createNode(diff != null ? diff.getLast() : null, DiffNode.Type.UNCHANGED, x.length - endX, true);
-        }
+        // Build LCS matrix and backtrack it
+        DiffNode diff = backtrack(x, y);
 
         // Split nodes
         diff = split(diff.getFirst());
@@ -284,25 +247,5 @@ public final class DiffAlgorithm {
             node = node.getNext();
         }
         return result;
-    }
-
-    static final class ArrayRange<T> {
-        private final T[] array;
-        private final int base;
-        private final int length;
-
-        public ArrayRange(T[] array, int start, int length) {
-            this.array = array;
-            this.base = start;
-            this.length = length;
-        }
-
-        public T get(int i) {
-            return array[base + i];
-        }
-
-        public int length() {
-            return length;
-        }
     }
 }

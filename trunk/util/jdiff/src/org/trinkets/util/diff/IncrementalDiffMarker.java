@@ -26,7 +26,8 @@ public abstract class IncrementalDiffMarker<T> extends StringDiffMarker {
         if (DiffNode.Type.REMOVED.equals(sourceNode.getType()) && DiffNode.Type.ADDED.equals(targetNode.getType())) {
             statsMarker.reset();
             subCompare(source, target, statsMarker);
-            if (statsMarker.getAddedPercent() < threshold && statsMarker.getRemovePercent() < threshold) {
+            if ((statsMarker.getAddedCount() > 0 || statsMarker.getRemovedCount() > 0) && statsMarker.getUnchangedCount() > 0 &&
+                (statsMarker.getAddedCount() < 2 && statsMarker.getRemovedCount() < 2 || statsMarker.getAddedPercent() < threshold && statsMarker.getRemovePercent() < threshold)) {
                 beforeSubMarkupText(sourceNode, targetNode);
                 sourceResult.append(subMarker.getSourceResult());
                 targetResult.append(subMarker.getTargetResult());

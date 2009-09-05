@@ -36,7 +36,7 @@ public class DiffMarkupTest extends TestCase {
             marker
         );
 
-        assertEquals("The -red -brown fox -jumped- over the -roling- log", marker.getSourceResult());
+        assertEquals("The- red- brown fox -jumped- over the -roling- log", marker.getSourceResult());
         assertEquals("The brown+ spotted+ fox +leaped+ over the +rolling+ log", marker.getTargetResult());
     }
 
@@ -58,10 +58,10 @@ public class DiffMarkupTest extends TestCase {
             "jumped over the roling log", "The brown spotted fox\n" +
             "leaped over the rolling log", marker);
 
-        assertEquals("*The -red -brown fox\n*" +
-            "*-jumped- over the *roling* log*", marker.getSourceResult());
+        assertEquals("*The- red- brown fox\n*" +
+            "**-jum-ped* over the *roling* log*", marker.getSourceResult());
         assertEquals("*The brown+ spotted+ fox\n*" +
-            "*+leaped+ over the *rol+l+ing* log*", marker.getTargetResult());
+            "**+lea+ped* over the *ro+l+ling* log*", marker.getTargetResult());
     }
 
     public void testCompareComplexLinesIncremental() {
@@ -167,15 +167,36 @@ public class DiffMarkupTest extends TestCase {
 
         assertEquals(
             "\n" +
-                "*import java.-io-.-OutputStream-;\n*" +
+                "-import java.io.OutputStream;\n-" +
                 "*import java.util.-*-;\n*" +
                 "\n", marker.getSourceResult());
         assertEquals(
             "\n" +
-                "*import java.+util+.+Collections+;\n*" +
+                "+import java.util.Collections;\n+" +
                 "*import java.util.+List+;\n*" +
                 "+import java.util.Map;\n+" +
                 "+import java.util.ArrayList;\n+" +
                 "\n", marker.getTargetResult());
+    }
+
+    public void testIncreaseIndenting() {
+        StringBuilderDiffMarker<String> marker = createIncrementalMarker();
+        DiffMarkup.compareLines(
+            "if (true) {\n" +
+                "    blablabla\n" +
+                "}\n",
+            "    if (true) {\n" +
+                "        blablabla\n" +
+                "    }\n",
+            marker);
+
+        assertEquals(
+            "*if (true) {\n*" +
+                "*    blablabla\n*" +
+                "*}\n*", marker.getSourceResult());
+        assertEquals(
+            "*+    +if (true) {\n*" +
+                "*+    +    blablabla\n*" +
+                "*+    +}\n*", marker.getTargetResult());
     }
 }

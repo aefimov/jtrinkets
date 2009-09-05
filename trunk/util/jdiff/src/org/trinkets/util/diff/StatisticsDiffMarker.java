@@ -6,52 +6,75 @@ package org.trinkets.util.diff;
  * @author Alexey Efimov
  */
 public class StatisticsDiffMarker<T> implements DiffMarker<T> {
-    protected final DiffMarker<T> delegate;
+    protected final StringBuilderDiffMarker<T> delegate;
 
-    private int added = 0;
-    private int removed = 0;
-    private int unchanged = 0;
+    private int addedLength = 0;
+    private int addedCount = 0;
+    private int removedLength = 0;
+    private int removedCount = 0;
+    private int unchangedLength = 0;
+    private int unchangedCount = 0;
 
-    protected StatisticsDiffMarker(DiffMarker<T> delegate) {
+    protected StatisticsDiffMarker(StringBuilderDiffMarker<T> delegate) {
         this.delegate = delegate;
     }
 
     public void apply(DiffNode sourceNode, T[] source, int sourceOffset, int sourceLength,
                       DiffNode targetNode, T[] target, int targetOffset, int targetLength) {
-        update(sourceNode.getType(), sourceLength, targetNode.getType(), targetLength);
-        if (delegate != null) {
-            delegate.apply(sourceNode, source, sourceOffset, sourceLength, targetNode, target, targetOffset, targetLength);
-        }
+
+        update(
+            sourceNode.getType(), delegate.toCharSequence(source, sourceOffset, sourceLength),
+            targetNode.getType(), delegate.toCharSequence(target, targetOffset, targetLength)
+        );
+        delegate.apply(sourceNode, source, sourceOffset, sourceLength, targetNode, target, targetOffset, targetLength);
     }
 
     public void reset() {
-        added = 0;
-        removed = 0;
-        unchanged = 0;
+        addedLength = 0;
+        addedCount = 0;
+        removedLength = 0;
+        removedCount = 0;
+        unchangedLength = 0;
+        unchangedCount = 0;
         if (delegate != null) {
             delegate.reset();
         }
     }
 
-    private void update(DiffNode.Type sourceType, int sourceLength, DiffNode.Type targetType, int targetLength) {
+    private void update(DiffNode.Type sourceType, CharSequence source, DiffNode.Type targetType, CharSequence target) {
         if (DiffNode.Type.ADDED.equals(targetType)) {
-            added += targetLength;
+            addedCount++;
+            addedLength += target.length();
         }
 
         if (DiffNode.Type.REMOVED.equals(sourceType)) {
-            removed += sourceLength;
+            removedCount++;
+            removedLength += source.length();
         }
 
         if (DiffNode.Type.UNCHANGED.equals(sourceType)) {
-            unchanged += sourceLength;
+            unchangedCount++;
+            unchangedLength += source.length();
         }
     }
 
     public double getAddedPercent() {
-        return added > 0 ? (unchanged > 0 ? ((double) added) / ((double) (added + unchanged)) : 1) : 0;
+        return addedLength > 0 ? (unchangedLength > 0 ? ((double) addedLength) / ((double) (addedLength + unchangedLength)) : 1) : 0;
     }
 
     public double getRemovePercent() {
-        return removed > 0 ? (unchanged > 0 ? ((double) removed) / ((double) (removed + unchanged)) : 1) : 0;
+        return removedLength > 0 ? (unchangedLength > 0 ? ((double) removedLength) / ((double) (removedLength + unchangedLength)) : 1) : 0;
+    }
+
+    public int getAddedCount() {
+        return addedCount;
+    }
+
+    public int getRemovedCount() {
+        return removedCount;
+    }
+
+    public int getUnchangedCount() {
+        return unchangedCount;
     }
 }

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="jtrickets-jdiff" basedir="." default="jar">
+
+    <!-- If not parsed then use default value -->
+    <property name="build.number" value="latest"/>
+
+    <property name="target.dir" value="out/ant"/>
+    <property name="src.dir" value="src"/>
+    <property name="output.dir" value="${target.dir}/classes"/>
+    <property name="jars.dir" value="${target.dir}/jars"/>
+
+    <patternset id="project.resources">
+        <include name="**/*.properties"/>
+        <include name="**/*.html"/>
+        <include name="**/*.js"/>
+        <include name="**/*.css"/>
+        <include name="**/*.gif"/>
+        <include name="**/*.png"/>
+        <include name="**/*.xml"/>
+        <include name="**/*.txt"/>
+    </patternset>
+
+    <path id="project.sourcepath">
+        <path location="${src.dir}"/>
+    </path>
+    <path id="project.classpath">
+        <fileset dir="lib" includes="*.jar"/>
+    </path>
+
+    <target name="prepare">
+        <mkdir dir="${output.dir}"/>
+        <mkdir dir="${jars.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean, prepare">
+        <javac source="1.5" target="1.5" destdir="${output.dir}" debug="true" encoding="UTF-8">
+            <src refid="project.sourcepath"/>
+            <classpath refid="project.classpath"/>
+        </javac>
+    </target>
+
+    <target name="clean" description="cleanup compiled classes">
+        <delete dir="${target.dir}" quiet="true"/>
+    </target>
+
+    <target name="jar" depends="compile, test">
+        <delete>
+            <fileset dir="${target.dir}" includes="${ant.project.name}*.jar"/>
+        </delete>
+        <tstamp>
+            <format property="build.date" pattern="dd.MM.yyyy HH:mm" locale="en,UK"/>
+        </tstamp>
+        <jar destfile="${jars.dir}/${ant.project.name}-${build.number}.jar">
+            <fileset dir="${output.dir}"/>
+            <fileset dir="${src.dir}">
+                <patternset refid="project.resources"/>
+                <type type="file"/>
+            </fileset>
+            <manifest>
+                <section name="${ant.project.name}">
+                    <attribute name="Build-Date" value="${build.date}"/>
+                    <attribute name="Build-Number" value="${build.number}"/>
+                </section>
+            </manifest>
+        </jar>
+        <jar destfile="${jars.dir}/${ant.project.name}-${build.number}-sources.jar">
+            <fileset dir="${src.dir}">
+                <type type="file"/>
+            </fileset>
+            <manifest>
+                <section name="${ant.project.name}">
+                    <attribute name="Build-Date" value="${build.date}"/>
+                    <attribute name="Build-Number" value="${build.number}"/>
+                </section>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="test" depends="compile">
+        <junit printsummary="yes" fork="yes" failureproperty="test.failure">
+            <sysproperty key="ant.junit.runner" value="true"/>
+            <jvmarg value="-Dfile.encoding=UTF-8"/>
+            <classpath>
+                <pathelement location="${output.dir}"/>
+            </classpath>
+            <classpath refid="project.sourcepath"/>
+            <classpath refid="project.classpath"/>
+
+            <batchtest todir="${basedir}">
+                <fileset dir="${output.dir}">
+                    <include name="**/*Test.class"/>
+                    <exclude name="**/Abstract*.class"/>
+                </fileset>
+                <formatter type="plain" usefile="no"/>
+            </batchtest>
+        </junit>
+
+        <fail message="Tests failed" if="test.failure"/>
+    </target>
+</project>
+<!-- vim: set ts=4 sw=4 et: -->

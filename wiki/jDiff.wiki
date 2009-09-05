@@ -1,0 +1,17 @@
+#summary Diff support for Java.
+
+Simple diff algorithm implementation. Support for incremental diff and ready to use in UI or HTML.
+
+To build it for your project use follow:
+{{{
+svn co http://jtrinkets.googlecode.com/svn/trunk/util/jdiff jdiff
+cd jdiff
+ant
+}}}
+This will generated two jars in curent directory:
+{{{
+out/ant/jars/jtrinkets-jdiff-latest.jar
+out/ant/jars/jtrinkets-jdiff-latest-sources.jar
+}}}
+
+If you will use it on TeamCity then version will be replaceb by build number from TeamCity.

@@ -198,6 +198,18 @@ public class DiffNode {
         return nodes.toArray(new DiffNode[nodes.size()]);
     }
 
+    public DiffNode reverse() {
+        DiffNode current = getFirst();
+        while (current != null) {
+            DiffNode next = current.getNext();
+            DiffNode previous = current.previous;
+            current.previous = next;
+            current.next = previous;
+            current = next;
+        }
+        return getFirst();
+    }
+
     /**
      * Diff type.
      *

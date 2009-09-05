@@ -48,7 +48,7 @@ public abstract class StringBuilderDiffMarker<T> implements DiffMarker<T> {
         afterMarkupText(sourceNode, targetNode);
     }
 
-    protected abstract CharSequence toCharSequence(T[] array, int offset, int length);
+    public abstract CharSequence toCharSequence(T[] array, int offset, int length);
 
     protected void beforeMarkupText(DiffNode sourceNode, DiffNode targetNode) {
         if (decorator != null) {

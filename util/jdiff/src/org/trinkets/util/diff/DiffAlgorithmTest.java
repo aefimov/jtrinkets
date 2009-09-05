@@ -11,10 +11,7 @@ public class DiffAlgorithmTest extends TestCase {
     public void testLcs() {
         Character[] x = Strings.toArray("XMJYAUZ".toCharArray());
         Character[] y = Strings.toArray("MZJAWXU".toCharArray());
-        int[][] c = DiffAlgorithm.lcs(
-            new DiffAlgorithm.ArrayRange<Character>(x, 0, x.length),
-            new DiffAlgorithm.ArrayRange<Character>(y, 0, y.length)
-        );
+        int[][] c = DiffAlgorithm.lcs(x, y);
         StringBuilder builder = new StringBuilder();
         for (int[] cx : c) {
             for (int cy : cx) {

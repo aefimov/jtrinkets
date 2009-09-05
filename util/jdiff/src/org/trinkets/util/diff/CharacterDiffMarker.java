@@ -11,7 +11,7 @@ public class CharacterDiffMarker extends StringBuilderDiffMarker<Character> {
     }
 
     @Override
-    protected CharSequence toCharSequence(Character[] array, int offset, int length) {
+    public CharSequence toCharSequence(Character[] array, int offset, int length) {
         return new String(Strings.toArray(array, offset, length));
     }
 }

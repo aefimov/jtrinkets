@@ -11,7 +11,10 @@ public class DiffAlgorithmTest extends TestCase {
     public void testLcs() {
         Character[] x = Strings.toArray("XMJYAUZ".toCharArray());
         Character[] y = Strings.toArray("MZJAWXU".toCharArray());
-        int[][] c = DiffAlgorithm.lcs(x, y);
+        int[][] c = DiffAlgorithm.lcs(
+            new DiffAlgorithm.ArrayRange<Character>(x, 0, x.length),
+            new DiffAlgorithm.ArrayRange<Character>(y, 0, y.length)
+        );
         StringBuilder builder = new StringBuilder();
         for (int[] cx : c) {
             for (int cy : cx) {
@@ -31,7 +34,7 @@ public class DiffAlgorithmTest extends TestCase {
     }
 
     public void testCompareChars() {
-        DiffNode[] nodes = DiffAlgorithm.compare(Strings.toArray("true"), Strings.toArray("false")).toArray();
+        DiffNode[] nodes = DiffAlgorithm.compare(Strings.toArray("true"), Strings.toArray("false"), false).toArray();
         assertEquals(2, nodes.length);
         assertEquals("R:0,3->A:0,4", nodes[0].toString());
         assertEquals("U:3,1->U:4,1", nodes[1].toString());

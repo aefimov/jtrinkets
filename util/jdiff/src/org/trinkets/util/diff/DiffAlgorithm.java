@@ -161,9 +161,9 @@ public final class DiffAlgorithm {
         }
 
         // Split nodes
-        diff = split(diff.getFirst());
+        diff = split(diff != null ? diff.getFirst() : null);
 
-        return diff.getFirst();
+        return diff != null ? diff.getFirst() : null;
     }
 
     private static DiffNode split(DiffNode node) {

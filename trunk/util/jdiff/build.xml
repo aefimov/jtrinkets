@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="jdiff" basedir="." default="jar">
-    <property name="ivy.publish.artifact.pattern" value="out/ant/jars/[artifact]-[type].[ext]"/>
-    <import file="ivy-ant/ivy-targets.xml"/>
-
+<project name="jtrickets-jdiff" basedir="." default="jar">
 
     <!-- If not parsed then use default value -->
     <property name="build.number" value="latest"/>
@@ -54,7 +51,7 @@
         <tstamp>
             <format property="build.date" pattern="dd.MM.yyyy HH:mm" locale="en,UK"/>
         </tstamp>
-        <jar destfile="${jars.dir}/${ant.project.name}-jar.jar">
+        <jar destfile="${jars.dir}/${ant.project.name}-${build.number}.jar">
             <fileset dir="${output.dir}"/>
             <fileset dir="${src.dir}">
                 <patternset refid="project.resources"/>
@@ -67,7 +64,7 @@
                 </section>
             </manifest>
         </jar>
-        <jar destfile="${jars.dir}/${ant.project.name}-source.jar">
+        <jar destfile="${jars.dir}/${ant.project.name}-${build.number}-sources.jar">
             <fileset dir="${src.dir}">
                 <type type="file"/>
             </fileset>

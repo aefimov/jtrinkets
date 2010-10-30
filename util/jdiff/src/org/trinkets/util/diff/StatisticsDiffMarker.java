@@ -15,7 +15,7 @@ public class StatisticsDiffMarker<T> implements DiffMarker<T> {
     private int unchangedLength = 0;
     private int unchangedCount = 0;
 
-    public StatisticsDiffMarker(StringBuilderDiffMarker<T> delegate) {
+    protected StatisticsDiffMarker(StringBuilderDiffMarker<T> delegate) {
         this.delegate = delegate;
     }
 
